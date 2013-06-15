@@ -22,6 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="DayScheduleSettingActivity"></activity>
+        <activity android:name="DayScheduleActivity"></activity>
     </application>
 
 </manifest>
