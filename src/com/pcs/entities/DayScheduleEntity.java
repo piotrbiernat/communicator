@@ -6,8 +6,7 @@ import com.turbomanage.storm.api.Id;
 @Entity
 public class DayScheduleEntity {
 
-	@Id
-	private long id;
+
 
 	public long getId() {
 		return id;
