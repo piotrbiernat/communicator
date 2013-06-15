@@ -4,5 +4,9 @@
     <string name="app_name">"PCS Communicator "</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="calender">Kalendarz</string>
+    <string name="day_schedule">Plan dnia</string>
+    <string name="communicator">Komunikator</string>
+    <string name="students_profile">Profil ucznia</string>
 
 </resources>
