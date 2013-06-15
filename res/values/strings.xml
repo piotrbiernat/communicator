@@ -8,4 +8,12 @@
     <string name="day_schedule">Plan dnia</string>
     <string name="communicator">Komunikator</string>
     <string name="students_profile">Profil ucznia</string>
+    <string name="monday">Poniedzialek</string>
+    <string name="tuesday">Wtorek</string>
+    <string name="wednesday">Sroda</string>
+    <string name="thursday">Czwartek</string>
+    <string name="friday">Piatek</string>
+    <string name="saturday">Sobota</string>
+    <string name="sunday">Niedziela</string>
+    <string name="day_schedule_settings">Ustawienia</string>
 </resources>
