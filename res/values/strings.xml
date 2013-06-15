@@ -4,15 +4,8 @@
     <string name="app_name">"PCS Communicator "</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
-    <string name="vibration">Vibration</string>
-    <string name="vibration_summary">Vibration summary</string>
-    <string name="monday">Poniedziałek</string>
-    <string name="tuesday">Wtorek</string>
-    <string name="wednesday">Środa</string>
-	<string name="thursday">Czwartek</string>
-	<string name="friday">Piątek</string>
-	<string name="saturday">Sobota</string>
-	<string name="sunday">Niedziela</string>
-	<string name="day_schedule_settings">Day Schedule Settings</string>
-
+    <string name="calender">Kalendarz</string>
+    <string name="day_schedule">Plan dnia</string>
+    <string name="communicator">Komunikator</string>
+    <string name="students_profile">Profil ucznia</string>
 </resources>
