@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android" >
+	<header
+	    android:fragment="com.pcs.fragments.DayScheduleSettingFragment" 
+	    android:title="@string/monday"
+	    android:summary="@string/monday">
+	    <extra android:name="day" android:value="monday" />
+	</header>    
+	<header
+	    android:fragment="com.pcs.fragments.DayScheduleSettingFragment" 
+	    android:title="@string/tuesday"
+	    android:summary="@string/tuesday">
+	    <extra android:name="day" android:value="tuesday" />
+	</header>    
+	<header
+	    android:fragment="com.pcs.fragments.DayScheduleSettingFragment" 
+	    android:title="@string/wednesday"
+	    android:summary="@string/wednesday">
+	    <extra android:name="day" android:value="wednesday" />
+	</header>    
+	<header
+	    android:fragment="com.pcs.fragments.DayScheduleSettingFragment" 
+	    android:title="@string/thursday"
+	    android:summary="@string/thursday">
+	    <extra android:name="day" android:value="thursday" />
+	</header>    
+	<header
+	    android:fragment="com.pcs.fragments.DayScheduleSettingFragment" 
+	    android:title="@string/friday"
+	    android:summary="@string/friday">
+	    <extra android:name="day" android:value="friday" />
+	</header>    
+	<header
+	    android:fragment="com.pcs.fragments.DayScheduleSettingFragment" 
+	    android:title="@string/saturday"
+	    android:summary="@string/saturday">
+	    <extra android:name="day" android:value="saturday" />
+	</header>    
+	<header
+	    android:fragment="com.pcs.fragments.DayScheduleSettingFragment" 
+	    android:title="@string/sunday"
+	    android:summary="@string/sunday">
+	    <extra android:name="day" android:value="sunday" />
+	</header>    
+</preference-headers>
