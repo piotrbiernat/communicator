@@ -11,6 +11,7 @@ import android.widget.Button;
 public class MainActivity extends Activity {
 
 	private Button button;
+	private Button calendarButton;
 
 	private class ButtonOnClickListener implements OnClickListener {
 
@@ -21,6 +22,17 @@ public class MainActivity extends Activity {
 			startActivity(intent);
 		}
 	}
+	
+	private class CalendarButtonOnClickListener implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(MainActivity.this,
+					CalendarListActivity.class);
+			startActivity(intent);
+		}
+	}
+		
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +40,10 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.main_view);
 		button = (Button) findViewById(R.id.button_day_schedule);
 		button.setOnClickListener(new ButtonOnClickListener());
+		
+		calendarButton = (Button) findViewById(R.id.button_calender);
+		calendarButton.setOnClickListener(new CalendarButtonOnClickListener());
+		
 	}
 
 	@Override
