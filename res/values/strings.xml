@@ -16,4 +16,7 @@
     <string name="saturday">Sobota</string>
     <string name="sunday">Niedziela</string>
     <string name="day_schedule_settings">Ustawienia</string>
+    <string name="title_calendar_detail">Pytania?</string>
+    <color name="testColorRed">#FF0000</color>
+
 </resources>
