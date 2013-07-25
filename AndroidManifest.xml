@@ -30,11 +30,7 @@
         <activity android:name="com.pcs.communicator.CalendarQuestionActivity"></activity>
         <activity
             android:name="com.pcs.communicator.CalendarDetailActivity"
-            android:label="@string/title_calendar_detail"
-            android:parentActivityName=".CalendarListActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".CalendarListActivity" />
+            android:label="@string/title_calendar_detail">
         </activity>
         
     </application>
