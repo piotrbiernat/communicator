@@ -65,7 +65,7 @@ public class CalendarListFragment extends ListFragment {
 
 				Intent intent = new Intent(getActivity(),
 						CalendarQuestionActivity.class);
-				intent.putExtra(CalendarListActivity.DAY_STRING, list.get(arg2));
+				intent.putExtra(CalendarQuestionActivity.DAY_STRING, list.get(arg2));
 				startActivity(intent);
 				return true;
 			}

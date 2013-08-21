@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 public class CalendarQuestionActivity extends Activity {
+	
+	public static final String DAY_STRING = "day";
 
 	private TextView dayName;
 	
@@ -14,6 +16,6 @@ public class CalendarQuestionActivity extends Activity {
         setContentView(R.layout.question);
         
 		dayName = (TextView) findViewById(R.id.dayName);
-		dayName.setText("Pytania na: " + getIntent().getStringExtra("day"));			
+		dayName.setText("Pytania na: " + getIntent().getStringExtra(DAY_STRING));			
 	}
 }
