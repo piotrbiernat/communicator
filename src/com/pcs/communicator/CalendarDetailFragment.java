@@ -5,6 +5,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.pcs.enums.Day;
 
 /**
  * A fragment representing a single Day detail screen. This fragment is either
@@ -27,11 +30,11 @@ public class CalendarDetailFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_calendar_detail,
 				container, false);
-		// Show the dummy content as text in a TextView.
-//		if (mItem != null) {
-//			((TextView) rootView.findViewById(R.id.calendar_detail))
-//					.setText(mItem.content);
-//		}
+		Day day = (Day) getArguments().getSerializable(
+				CalendarQuestionActivity.DAY_STRING);
+		((TextView) rootView.findViewById(R.id.calendar_detail))
+				.setText(getActivity().getResources().getString(
+						day.getResourceID()));
 		return rootView;
 	}
 }

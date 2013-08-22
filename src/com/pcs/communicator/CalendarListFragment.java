@@ -3,14 +3,13 @@ package com.pcs.communicator;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.pcs.adapter.CalendarListAdapter;
+import com.pcs.enums.Day;
 
 /**
  * A list fragment representing a list of Days. Activities containing this
@@ -23,12 +22,12 @@ public class CalendarListFragment extends ListFragment {
 
 	public interface Callbacks {
 
-		public void onItemSelected(String id);
+		public void onItemSelected(Day day);
 	}
 
 	private static Callbacks sDummyCallbacks = new Callbacks() {
 		@Override
-		public void onItemSelected(String id) {
+		public void onItemSelected(Day day) {
 		}
 	};
 
@@ -38,39 +37,13 @@ public class CalendarListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		list = new ArrayList<String>();
-		list.add(getString(R.string.monday));
-		list.add(getString(R.string.tuesday));
-		list.add(getString(R.string.wednesday));
-		list.add(getString(R.string.thursday));
-		list.add(getString(R.string.friday));
-		list.add(getString(R.string.saturday));
-		list.add(getString(R.string.sunday));
-
-		setListAdapter(new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_list_item_1, list));
-
+		setListAdapter(new CalendarListAdapter(
+				(CalendarListActivity) getActivity()));
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-
-		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-
-				Intent intent = new Intent(getActivity(),
-						CalendarQuestionActivity.class);
-				intent.putExtra(CalendarQuestionActivity.DAY_STRING, list.get(arg2));
-				startActivity(intent);
-				return true;
-			}
-		});
-
 	}
 
 	@Override
@@ -101,7 +74,7 @@ public class CalendarListFragment extends ListFragment {
 
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
-		mCallbacks.onItemSelected(list.get(position));
+		mCallbacks.onItemSelected((Day) getListAdapter().getItem(position));
 	}
 
 	/**

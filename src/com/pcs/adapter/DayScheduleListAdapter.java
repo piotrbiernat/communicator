@@ -15,12 +15,13 @@ public class DayScheduleListAdapter extends BaseAdapter {
 
 	private List<String> days;
 	private LayoutInflater inflanter;
-	
+
 	public DayScheduleListAdapter(Context context, List<String> days) {
 		this.days = days;
-		inflanter = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		inflanter = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
-	
+
 	@Override
 	public int getCount() {
 		return days.size();
@@ -38,8 +39,10 @@ public class DayScheduleListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View view = inflanter.inflate(R.layout.day_schedule_list_item, parent, false);
-		TextView textView = (TextView) view.findViewById(R.id.day_schedule_item);
+		View view = inflanter.inflate(R.layout.day_schedule_list_item, parent,
+				false);
+		TextView textView = (TextView) view
+				.findViewById(R.id.day_schedule_item);
 		textView.setText(days.get(position));
 		return view;
 	}

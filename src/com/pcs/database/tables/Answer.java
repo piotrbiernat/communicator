@@ -7,7 +7,7 @@ public class Answer {
 	private long id;
 	private String link;
 	private String text;
-	private boolean isCorrect;
+	private boolean correct;
 	private long questionID;
 
 	public long getId() {
@@ -35,11 +35,11 @@ public class Answer {
 	}
 
 	public boolean isCorrect() {
-		return isCorrect;
+		return correct;
 	}
 
-	public void setCorrect(boolean isCorrect) {
-		this.isCorrect = isCorrect;
+	public void setCorrect(boolean correct) {
+		this.correct = correct;
 	}
 
 	public long getQuestionID() {

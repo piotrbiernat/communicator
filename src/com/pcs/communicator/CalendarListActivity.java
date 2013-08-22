@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import com.pcs.enums.Day;
+
 public class CalendarListActivity extends FragmentActivity implements
 		CalendarListFragment.Callbacks {
 
@@ -12,7 +14,7 @@ public class CalendarListActivity extends FragmentActivity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
+		getApplicationContext().getResources();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_calendar_list);
 
@@ -26,26 +28,15 @@ public class CalendarListActivity extends FragmentActivity implements
 	}
 
 	@Override
-	public void onItemSelected(String day) {
+	public void onItemSelected(Day day) {
 
-		if (mTwoPane) {
-			// In two-pane mode, show the detail view in this activity by
-			// adding or replacing the detail fragment using a
-			// fragment transaction.
-			Bundle arguments = new Bundle();
-			arguments.putString(DAY_STRING, day);
-			CalendarDetailFragment fragment = new CalendarDetailFragment();
-			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.calendar_detail_container, fragment).commit();
+		Intent detailIntent = new Intent(this, CalendarQuestionActivity.class);
+		detailIntent.putExtra(DAY_STRING, day);
+		startActivity(detailIntent);
+	}
 
-		} else {
-			// In single-pane mode, simply start the detail activity
-			// for the selected item ID.
-			Intent detailIntent = new Intent(this, CalendarDetailActivity.class);
-			detailIntent.putExtra(DAY_STRING, day);
-			startActivity(detailIntent);
-		}
+	public boolean isTwoPane() {
+		return mTwoPane;
 	}
 
 }

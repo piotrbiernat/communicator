@@ -16,7 +16,7 @@ public class CalendarDetailActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_calendar_detail);
- 
+
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -24,20 +24,24 @@ public class CalendarDetailActivity extends FragmentActivity {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
-			arguments.putString(CalendarListActivity.DAY_STRING, getIntent()
-					.getStringExtra(CalendarListActivity.DAY_STRING));
+			arguments.putSerializable(
+					CalendarListActivity.DAY_STRING,
+					getIntent().getSerializableExtra(
+							CalendarListActivity.DAY_STRING));
 			CalendarDetailFragment fragment = new CalendarDetailFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().add(R.id.calendar_detail_container, fragment).commit();
+			getSupportFragmentManager().beginTransaction()
+					.add(R.id.calendar_detail_container, fragment).commit();
 		}
 	}
-  
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		
+
 		case android.R.id.home:
-			NavUtils.navigateUpTo(this, new Intent(this, CalendarListActivity.class));
+			NavUtils.navigateUpTo(this, new Intent(this,
+					CalendarListActivity.class));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
