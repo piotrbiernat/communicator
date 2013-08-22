@@ -34,7 +34,10 @@ public class CalendarDetailFragment extends Fragment {
 				CalendarQuestionActivity.DAY_STRING);
 		((TextView) rootView.findViewById(R.id.calendar_detail))
 				.setText(getActivity().getResources().getString(
-						day.getResourceID()));
+						R.string.title_calendar_detail)
+						+ " "
+						+ getActivity().getResources().getString(
+								day.getResourceID()));
 		return rootView;
 	}
 }

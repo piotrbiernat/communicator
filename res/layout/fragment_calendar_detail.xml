@@ -1,11 +1,32 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/calendar_detail"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="?android:attr/textAppearanceLarge"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lightGray"
     android:padding="16dp"
-    android:background="@color/testColorBlue"
-    android:textIsSelectable="true"
-    tools:context=".CalendarDetailFragment" />
+    android:textIsSelectable="true" >
 
+    <!-- HEADER -->
+
+    <TextView
+        android:id="@+id/calendar_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" 
+        android:layout_marginBottom="4dip"
+        android:textSize="20sp"/>
+
+    <!-- MAIN PART -->
+
+    <LinearLayout
+        android:id="@+id/sub_content_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/calendar_detail"
+        android:background="#EAEAEA"
+        android:orientation="vertical"
+        android:paddingBottom="8sp" >
+    </LinearLayout>
+
+</RelativeLayout>
