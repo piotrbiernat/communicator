@@ -7,18 +7,21 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 
 import com.pcs.adapter.DayScheduleListAdapter;
+import com.pcs.enums.Day;
 
 public class DayScheduleListFragment extends ListFragment {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		List<String> days = new ArrayList<String>(5);
-		days.add("Poniedzialek");
-		days.add("Wtorek");
-		days.add("Sroda");
-		days.add("Czwartek");
-		days.add("Piatek");
+		List<Day> days = new ArrayList<Day>(5);
+		days.add(Day.MONDAY);
+		days.add(Day.TUESDAY);
+		days.add(Day.WEDNESDAY);
+		days.add(Day.THURSDAY);
+		days.add(Day.FRIDAY);
+		days.add(Day.SATURDAY);
+		days.add(Day.SUNDAY);
 		setListAdapter(new DayScheduleListAdapter(getActivity(), days));
 	}
 }

@@ -2,8 +2,7 @@ package com.pcs.adapter;
 
 import java.util.List;
 
-import com.pcs.communicator.R;
-
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +10,19 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.pcs.communicator.R;
+import com.pcs.enums.Day;
+
 public class DayScheduleListAdapter extends BaseAdapter {
 
-	private List<String> days;
+	private List<Day> days;
 	private LayoutInflater inflanter;
+	private Activity activity;
 
-	public DayScheduleListAdapter(Context context, List<String> days) {
+	public DayScheduleListAdapter(Activity activity, List<Day> days) {
+		this.activity = activity;
 		this.days = days;
-		inflanter = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		inflanter = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	@Override
@@ -43,7 +46,7 @@ public class DayScheduleListAdapter extends BaseAdapter {
 				false);
 		TextView textView = (TextView) view
 				.findViewById(R.id.day_schedule_item);
-		textView.setText(days.get(position));
+		textView.setText(activity.getResources().getString(days.get(position).getResourceID()));
 		return view;
 	}
 
