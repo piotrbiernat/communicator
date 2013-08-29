@@ -1,13 +1,11 @@
 package com.pcs.communicator;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.View;
+import android.view.MenuItem;
 
 import com.pcs.enums.Day;
 
@@ -34,13 +32,8 @@ public class CalendarListActivity extends FragmentActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		ActionBar ab = getActionBar();
-		LayoutInflater inflater = (LayoutInflater) getSystemService("layout_inflater");
-		View view = inflater.inflate(R.layout.action_bar_calendar_activity,
-				null);
-		ab.setCustomView(view);
-		ab.setDisplayShowCustomEnabled(true);
-		return true;
+		getMenuInflater().inflate(R.menu.action_bar_calendar_activity, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
@@ -49,6 +42,20 @@ public class CalendarListActivity extends FragmentActivity implements
 		Intent detailIntent = new Intent(this, CalendarQuestionActivity.class);
 		detailIntent.putExtra(DAY_STRING, day);
 		startActivity(detailIntent);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.manager_button:
+
+			Intent intent = new Intent(CalendarListActivity.this,
+					QuestionManagerActivity.class);
+			startActivity(intent);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	public boolean isTwoPane() {

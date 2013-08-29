@@ -15,12 +15,12 @@
     <string name="friday">Piątek</string>
     <string name="saturday">Sobota</string>
     <string name="sunday">Niedziela</string>
-    <string name="day_schedule_settings">Ustawienia</string>
     <string name="title_calendar_detail">Pytania na wybrany dzień:</string>
     <string name="edit">Edytuj</string>
     <string name="tutor">Tutor</string>
     <string name="play">Graj</string>
     <string name="questions_manager">Manager pytań</string>
+    <string name="settings">Ustawienia</string>
 
     <color name="lightGray">#B0B0B0</color>
     <color name="testColorRed">#FF0000</color>
