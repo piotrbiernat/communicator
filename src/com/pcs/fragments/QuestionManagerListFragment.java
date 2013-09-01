@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.pcs.adapter.QuestionListAdapter;
-import com.pcs.communicator.R;
-import com.pcs.communicator.R.id;
 import com.pcs.database.tables.Question;
 import com.pcs.database.tables.dao.QuestionDao;
 
@@ -55,10 +53,6 @@ public class QuestionManagerListFragment extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		if (position == 0) {
 			managerActions.addNewQuestion();
-		} else if (position > 0 && v.getId() == R.id.deleteAddButton) {
-			Question questionToDelete = (Question) getListAdapter().getItem(
-					position);
-			managerActions.deleteQuestion(questionToDelete.getId());
 		} else {
 			Question questionToDelete = (Question) getListAdapter().getItem(
 					position);
@@ -68,7 +62,8 @@ public class QuestionManagerListFragment extends ListFragment {
 	}
 
 	public void updateQuestionList() {
-		setListAdapter(new QuestionListAdapter(questionDoa.listAll(),
-				getActivity()));
+
+		((QuestionListAdapter) getListAdapter()).setQuestions(questionDoa
+				.listAll());
 	}
 }

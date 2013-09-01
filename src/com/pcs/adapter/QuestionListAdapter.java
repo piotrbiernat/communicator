@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -13,24 +14,45 @@ import android.widget.TextView;
 
 import com.pcs.communicator.R;
 import com.pcs.database.tables.Question;
+import com.pcs.fragments.QuestionManagerListFragment.QuestionManagerActions;
 
 public class QuestionListAdapter extends BaseAdapter {
 	private List<Question> questions = new ArrayList<Question>();
 	private Context context;
+	private QuestionManagerActions managerAction;
 
 	public QuestionListAdapter(List<Question> questions, Context context) {
 		this.context = context;
-		this.questions = questions;
+		if (context instanceof QuestionManagerActions) {
+			managerAction = (QuestionManagerActions) context;
+		}
+		this.setQuestions(questions);
+	}
+
+	private class RemoveQuestionListener implements OnClickListener {
+
+		private Question question;
+
+		public RemoveQuestionListener(Question question) {
+			this.question = question;
+		}
+
+		@Override
+		public void onClick(View v) {
+			if (managerAction != null) {
+				managerAction.deleteQuestion(question.getId());
+			}
+		}
 	}
 
 	@Override
 	public int getCount() {
-		return questions.size() + 1;
+		return getQuestions().size() + 1;
 	}
 
 	@Override
-	public Object getItem(int position) {
-		return questions.get(position - 1);
+	public Question getItem(int position) {
+		return getQuestions().get(position - 1);
 	}
 
 	@Override
@@ -59,10 +81,21 @@ public class QuestionListAdapter extends BaseAdapter {
 			ImageView deleteButton = (ImageView) rowView
 					.findViewById(R.id.deleteAddButton);
 			deleteButton.setImageResource(android.R.drawable.ic_menu_delete);
-			Question question = questions.get(position - 1);
+			deleteButton.setOnClickListener(new RemoveQuestionListener(
+					(Question) getItem(position)));
+			Question question = getItem(position);
 			textView.setText(question.getText());
 			return rowView;
 		}
 
+	}
+
+	public List<Question> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(List<Question> questions) {
+		this.questions = questions;
+		notifyDataSetChanged();
 	}
 }

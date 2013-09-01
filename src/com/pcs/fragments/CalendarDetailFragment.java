@@ -11,9 +11,6 @@ import android.widget.TextView;
 import com.pcs.communicator.CalendarDetailActivity;
 import com.pcs.communicator.CalendarQuestionActivity;
 import com.pcs.communicator.R;
-import com.pcs.communicator.R.id;
-import com.pcs.communicator.R.layout;
-import com.pcs.communicator.R.string;
 import com.pcs.enums.Day;
 
 /**
