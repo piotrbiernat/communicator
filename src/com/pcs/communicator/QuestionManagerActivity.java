@@ -4,7 +4,8 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.pcs.communicator.QuestionManagerListFragment.QuestionManagerActions;
+import com.pcs.fragments.QuestionManagerMaintainerFragment;
+import com.pcs.fragments.QuestionManagerListFragment.QuestionManagerActions;
 
 public class QuestionManagerActivity extends FragmentActivity implements
 		QuestionManagerActions {

@@ -15,11 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pcs.communicator.CalendarDetailActivity;
-import com.pcs.communicator.CalendarDetailFragment;
 import com.pcs.communicator.CalendarListActivity;
 import com.pcs.communicator.CalendarQuestionActivity;
 import com.pcs.communicator.R;
 import com.pcs.enums.Day;
+import com.pcs.fragments.CalendarDetailFragment;
 
 public class CalendarListAdapter extends BaseAdapter {
 	private final CalendarListActivity activity;

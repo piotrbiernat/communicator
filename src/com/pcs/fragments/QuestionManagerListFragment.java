@@ -1,4 +1,4 @@
-package com.pcs.communicator;
+package com.pcs.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.pcs.adapter.QuestionListAdapter;
+import com.pcs.communicator.R;
+import com.pcs.communicator.R.id;
 import com.pcs.database.tables.Question;
 import com.pcs.database.tables.dao.QuestionDao;
 

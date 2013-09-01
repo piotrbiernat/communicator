@@ -1,4 +1,4 @@
-package com.pcs.communicator;
+package com.pcs.fragments;
 
 import java.util.ArrayList;
 
@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.pcs.adapter.CalendarListAdapter;
+import com.pcs.communicator.CalendarListActivity;
 import com.pcs.enums.Day;
 
 /**

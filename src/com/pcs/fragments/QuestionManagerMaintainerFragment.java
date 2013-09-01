@@ -1,4 +1,4 @@
-package com.pcs.communicator;
+package com.pcs.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.pcs.communicator.R;
+import com.pcs.communicator.R.id;
+import com.pcs.communicator.R.layout;
 import com.pcs.database.tables.Question;
 import com.pcs.database.tables.dao.QuestionDao;
 

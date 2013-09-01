@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+import com.pcs.fragments.CalendarDetailFragment;
+
 /**
  * An activity representing a single Day detail screen. This activity is only
  * used on handset devices.

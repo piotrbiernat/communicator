@@ -1,4 +1,4 @@
-package com.pcs.communicator;
+package com.pcs.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.pcs.communicator.CalendarDetailActivity;
+import com.pcs.communicator.CalendarQuestionActivity;
+import com.pcs.communicator.R;
+import com.pcs.communicator.R.id;
+import com.pcs.communicator.R.layout;
+import com.pcs.communicator.R.string;
 import com.pcs.enums.Day;
 
 /**
