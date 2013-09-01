@@ -7,6 +7,10 @@ public class Question {
 	private long id;
 	private String text;
 	
+	public Question() {
+
+	}
+
 	public Question(String text) {
 		this.text = text;
 
