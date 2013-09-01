@@ -103,7 +103,7 @@ public class CalendarListAdapter extends BaseAdapter {
 				false);
 		TextView textView = (TextView) rowView.findViewById(R.id.label);
 		ImageView editButton = (ImageView) rowView
-				.findViewById(R.id.editButton);
+				.findViewById(R.id.deleteAddButton);
 		ImageView tutorButton = (ImageView) rowView
 				.findViewById(R.id.tutorButton);
 

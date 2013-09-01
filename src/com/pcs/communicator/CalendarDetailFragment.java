@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pcs.enums.Day;
@@ -16,13 +17,13 @@ import com.pcs.enums.Day;
  */
 public class CalendarDetailFragment extends Fragment {
 
-	public CalendarDetailFragment() {
-	}
+	private Day day;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		day = (Day) getArguments().getSerializable(
+				CalendarQuestionActivity.DAY_STRING);
 	}
 
 	@Override
@@ -30,14 +31,14 @@ public class CalendarDetailFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_calendar_detail,
 				container, false);
-		Day day = (Day) getArguments().getSerializable(
-				CalendarQuestionActivity.DAY_STRING);
 		((TextView) rootView.findViewById(R.id.calendar_detail))
 				.setText(getActivity().getResources().getString(
 						R.string.title_calendar_detail)
 						+ " "
 						+ getActivity().getResources().getString(
 								day.getResourceID()));
+		ListView questionsForAday = (ListView) rootView
+				.findViewById(R.id.questions_for_day);
 		return rootView;
 	}
 }

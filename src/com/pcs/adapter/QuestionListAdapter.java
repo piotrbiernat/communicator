@@ -7,7 +7,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,28 +30,12 @@ public class QuestionListAdapter extends BaseAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		return questions.get(position);
+		return questions.get(position - 1);
 	}
 
 	@Override
 	public long getItemId(int position) {
 		return position;
-	}
-
-	private class RemoveOnClickListener implements OnClickListener {
-
-		Question question;
-		
-		public RemoveOnClickListener(Question question) {
-			this.question = question;
-		}
-		
-		@Override
-		public void onClick(View v) {
-
-			// TODO REMOVE question from DB
-			
-		}
 	}
 
 	@Override
@@ -61,30 +44,23 @@ public class QuestionListAdapter extends BaseAdapter {
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		if (position == 0) {
-
-			View rowView = inflater.inflate(R.layout.question_new_row_layout,
-					parent, false);
-			ImageView plusButton = (ImageView) rowView
-					.findViewById(R.id.plusButton);
-
-			return rowView;
-
-		} else {
-
 			View rowView = inflater.inflate(R.layout.question_row_layout,
 					parent, false);
-
 			TextView textView = (TextView) rowView.findViewById(R.id.label);
-			ImageView removeButton = (ImageView) rowView
-					.findViewById(R.id.editButton);
-
+			textView.setText(R.string.addNew);
+			ImageView addButton = (ImageView) rowView
+					.findViewById(R.id.deleteAddButton);
+			addButton.setImageResource(android.R.drawable.ic_menu_add);
+			return rowView;
+		} else {
+			View rowView = inflater.inflate(R.layout.question_row_layout,
+					parent, false);
+			TextView textView = (TextView) rowView.findViewById(R.id.label);
+			ImageView deleteButton = (ImageView) rowView
+					.findViewById(R.id.deleteAddButton);
+			deleteButton.setImageResource(android.R.drawable.ic_menu_delete);
 			Question question = questions.get(position - 1);
-
 			textView.setText(question.getText());
-
-			removeButton
-					.setOnClickListener(new RemoveOnClickListener(question));
-
 			return rowView;
 		}
 

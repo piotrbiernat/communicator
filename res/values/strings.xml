@@ -26,5 +26,6 @@
     <color name="lightGray">#B0B0B0</color>
     <color name="testColorRed">#FF0000</color>
     <color name="testColorBlue">#0000FF</color>
+    <string name="save">Zapisz</string>
 
 </resources>

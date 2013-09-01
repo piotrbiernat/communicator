@@ -19,14 +19,14 @@
 
     <!-- MAIN PART -->
 
-    <LinearLayout
-        android:id="@+id/sub_content_view"
+    <ListView
+        android:id="@+id/questions_for_day"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/calendar_detail"
         android:background="#EAEAEA"
         android:orientation="vertical"
         android:paddingBottom="8sp" >
-    </LinearLayout>
+    </ListView>
 
 </RelativeLayout>
