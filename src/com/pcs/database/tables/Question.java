@@ -6,6 +6,11 @@ import com.turbomanage.storm.api.Entity;
 public class Question {
 	private long id;
 	private String text;
+	
+	public Question(String text) {
+		this.text = text;
+
+	}
 
 	public long getId() {
 		return id;
