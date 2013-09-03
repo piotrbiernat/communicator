@@ -66,4 +66,7 @@ public class QuestionManagerListFragment extends ListFragment {
 		((QuestionListAdapter) getListAdapter()).setQuestions(questionDoa
 				.listAll());
 	}
+
+
+	
 }

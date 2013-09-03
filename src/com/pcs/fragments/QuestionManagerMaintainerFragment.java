@@ -1,8 +1,10 @@
 package com.pcs.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.pcs.communicator.QuestionManagerActivity;
 import com.pcs.communicator.R;
 import com.pcs.database.tables.Question;
 import com.pcs.database.tables.dao.QuestionDao;
@@ -37,18 +40,27 @@ public class QuestionManagerMaintainerFragment extends Fragment {
 			isNew = false;
 			FragmentActivity a = getActivity();
 			QuestionManagerListFragment questionList = (QuestionManagerListFragment) a
-					.getSupportFragmentManager()
-					.findFragmentById(R.id.question_list);
-			questionList.updateQuestionList();
+					.getSupportFragmentManager().findFragmentById(
+							R.id.question_list);
+			if (questionList != null)
+				questionList.updateQuestionList();
+			else
+				NavUtils.navigateUpTo(getActivity(), new Intent(getActivity(),
+						QuestionManagerActivity.class));
 		}
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Bundle extras = getActivity().getIntent().getExtras();
 		questionDoa = new QuestionDao(getActivity());
 		if (getArguments() != null) {
 			Long id = getArguments().getLong(QUESTION_ID);
+			question = questionDoa.get(id);
+			isNew = false;
+		} else if (extras != null) {	// phone
+			Long id = extras.getLong(QUESTION_ID);
 			question = questionDoa.get(id);
 			isNew = false;
 		} else {

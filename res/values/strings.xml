@@ -19,10 +19,15 @@
     <string name="edit">Edytuj</string>
     <string name="tutor">Tutor</string>
     <string name="play">Graj</string>
-    <string name="questions_manager">Manager pytań</string>
+    <string name="questions_manager">Manager pytań</string>    
+    <string name="question_edition">Edycja pytania</string>    
     <string name="settings">Ustawienia</string>
     <string name="addNew">Dodaj nowe</string>
-
+    <string name="yesString">Tak</string>
+    <string name="noString">Nie</string>
+    <string name="deleteConfirmation">Czy na pewno chcesz usunąć wybrane pytanie?</string>
+    
+    
     <color name="lightGray">#B0B0B0</color>
     <color name="testColorRed">#FF0000</color>
     <color name="testColorBlue">#0000FF</color>

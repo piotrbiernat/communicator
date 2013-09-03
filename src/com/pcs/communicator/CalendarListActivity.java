@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,6 +21,9 @@ public class CalendarListActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		getApplicationContext().getResources();
 		super.onCreate(savedInstanceState);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setTitle(R.string.calender);
+
 		setContentView(R.layout.activity_calendar_list);
 
 		if (findViewById(R.id.calendar_detail_container) != null) {
@@ -54,6 +58,11 @@ public class CalendarListActivity extends FragmentActivity implements
 					QuestionManagerActivity.class);
 			startActivity(intent);
 			return true;
+
+		case android.R.id.home:
+			NavUtils.navigateUpTo(this, new Intent(this, MainActivity.class));
+			return true;
+
 		default:
 			return super.onOptionsItemSelected(item);
 		}

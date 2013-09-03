@@ -28,6 +28,8 @@
 		<!-- Calendar -->
         <activity android:name="com.pcs.communicator.CalendarListActivity"></activity>
         <activity android:name="com.pcs.communicator.QuestionManagerActivity"></activity>
+       	<activity android:name="com.pcs.communicator.QuestionManagerDetailActivity"></activity>
+        
         <activity android:name="com.pcs.communicator.CalendarQuestionActivity"></activity>
         <activity
             android:name="com.pcs.communicator.CalendarDetailActivity"
