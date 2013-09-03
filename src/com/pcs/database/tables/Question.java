@@ -6,6 +6,7 @@ import com.turbomanage.storm.api.Entity;
 public class Question {
 	private long id;
 	private String text;
+	private String availableDays;
 	
 	public Question() {
 
@@ -13,7 +14,6 @@ public class Question {
 
 	public Question(String text) {
 		this.text = text;
-
 	}
 
 	public long getId() {
@@ -32,4 +32,11 @@ public class Question {
 		this.text = text;
 	}
 
+	public String getAvailableDays() {
+		return availableDays;
+	}
+
+	public void setAvailableDays(String availableDays) {
+		this.availableDays = availableDays;
+	}
 }

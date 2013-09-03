@@ -1,5 +1,7 @@
 package com.pcs.fragments;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,9 +13,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
+import com.pcs.adapter.AnswerListAdapter;
+import com.pcs.adapter.AssignForDayAdapter;
 import com.pcs.communicator.QuestionManagerActivity;
 import com.pcs.communicator.R;
+import com.pcs.database.tables.Answer;
 import com.pcs.database.tables.Question;
 import com.pcs.database.tables.dao.QuestionDao;
 
@@ -26,6 +32,10 @@ public class QuestionManagerMaintainerFragment extends Fragment {
 	private QuestionDao questionDoa;
 	private Question question;
 	private boolean isNew;
+
+	private ListView answersList;
+
+	private ListView assignForDay;
 
 	private class SaveQuestionClickListener implements OnClickListener {
 
@@ -79,6 +89,13 @@ public class QuestionManagerMaintainerFragment extends Fragment {
 
 		saveButton = (Button) view.findViewById(R.id.saveButton);
 		saveButton.setOnClickListener(new SaveQuestionClickListener());
+
+		answersList = (ListView) view.findViewById(R.id.answer_list);
+		answersList.setAdapter(new AnswerListAdapter(new ArrayList<Answer>(),
+				getActivity()));
+
+		assignForDay = (ListView) view.findViewById(R.id.assign_for_day);
+		assignForDay.setAdapter(new AssignForDayAdapter(getActivity(), question));
 		return view;
 	}
 

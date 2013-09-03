@@ -20,6 +20,7 @@ public class QuestionListAdapter extends BaseAdapter {
 	private List<Question> questions = new ArrayList<Question>();
 	private Context context;
 	private QuestionManagerActions managerAction;
+	private LayoutInflater inflater;
 
 	public QuestionListAdapter(List<Question> questions, Context context) {
 		this.context = context;
@@ -27,6 +28,8 @@ public class QuestionListAdapter extends BaseAdapter {
 			managerAction = (QuestionManagerActions) context;
 		}
 		this.setQuestions(questions);
+		inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	private class RemoveQuestionListener implements OnClickListener {
@@ -63,8 +66,6 @@ public class QuestionListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		if (position == 0) {
 			View rowView = inflater.inflate(R.layout.question_row_layout,
 					parent, false);
