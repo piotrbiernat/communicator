@@ -26,8 +26,8 @@
     <string name="yesString">Tak</string>
     <string name="noString">Nie</string>
     <string name="deleteConfirmation">Czy na pewno chcesz usunąć wybrane pytanie?</string>
-    
-    
+    <string name="emptyQuestion">Wpisz treść pytania</string>
+        
     <color name="lightGray">#B0B0B0</color>
     <color name="testColorRed">#FF0000</color>
     <color name="testColorBlue">#0000FF</color>

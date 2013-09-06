@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+import com.pcs.database.tables.dao.QuestionDao;
 import com.pcs.fragments.CalendarDetailFragment;
 
 /**
@@ -14,10 +15,13 @@ import com.pcs.fragments.CalendarDetailFragment;
  */
 public class CalendarDetailActivity extends FragmentActivity {
 
+	QuestionDao questionDao;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_calendar_detail);
+		questionDao = new QuestionDao(this);
 
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -48,4 +52,5 @@ public class CalendarDetailActivity extends FragmentActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
 }

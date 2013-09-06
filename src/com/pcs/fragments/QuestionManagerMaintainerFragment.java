@@ -32,6 +32,7 @@ public class QuestionManagerMaintainerFragment extends Fragment {
 	private QuestionDao questionDoa;
 	private Question question;
 	private boolean isNew;
+	private String questionText;
 
 	private ListView answersList;
 
@@ -41,22 +42,28 @@ public class QuestionManagerMaintainerFragment extends Fragment {
 
 		@Override
 		public void onClick(View v) {
-			question.setText(questionContent.getText().toString());
-			if (isNew) {
-				questionDoa.insert(question);
+			questionText = questionContent.getText().toString();
+
+			if (!questionText.trim().equals("")) {
+				question.setText(questionText);
+				if (isNew) {
+					questionDoa.insert(question);
+				} else {
+					questionDoa.update(question);
+				}
+				isNew = false;
+				FragmentActivity a = getActivity();
+				QuestionManagerListFragment questionList = (QuestionManagerListFragment) a
+						.getSupportFragmentManager().findFragmentById(
+								R.id.question_list);
+				if (questionList != null)
+					questionList.updateQuestionList();
+				else
+					NavUtils.navigateUpTo(getActivity(), new Intent(
+							getActivity(), QuestionManagerActivity.class));
 			} else {
-				questionDoa.update(question);
+				questionContent.setError(getString(R.string.emptyQuestion));
 			}
-			isNew = false;
-			FragmentActivity a = getActivity();
-			QuestionManagerListFragment questionList = (QuestionManagerListFragment) a
-					.getSupportFragmentManager().findFragmentById(
-							R.id.question_list);
-			if (questionList != null)
-				questionList.updateQuestionList();
-			else
-				NavUtils.navigateUpTo(getActivity(), new Intent(getActivity(),
-						QuestionManagerActivity.class));
 		}
 	}
 
@@ -69,7 +76,7 @@ public class QuestionManagerMaintainerFragment extends Fragment {
 			Long id = getArguments().getLong(QUESTION_ID);
 			question = questionDoa.get(id);
 			isNew = false;
-		} else if (extras != null) {	// phone
+		} else if (extras != null) { // phone
 			Long id = extras.getLong(QUESTION_ID);
 			question = questionDoa.get(id);
 			isNew = false;
@@ -95,7 +102,8 @@ public class QuestionManagerMaintainerFragment extends Fragment {
 				getActivity()));
 
 		assignForDay = (ListView) view.findViewById(R.id.assign_for_day);
-		assignForDay.setAdapter(new AssignForDayAdapter(getActivity(), question));
+		assignForDay
+				.setAdapter(new AssignForDayAdapter(getActivity(), question));
 		return view;
 	}
 

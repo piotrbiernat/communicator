@@ -35,6 +35,12 @@ public class QuestionWrapper {
 		return availableDays;
 	}
 
+	public void removeDay(Day day) {
+		Set<Day> days = getAvailableDays();
+		days.remove(day);
+		setAvailableDays(days);
+	}
+	
 	public Question getQuestion() {
 		return question;
 	}

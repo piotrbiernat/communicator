@@ -32,6 +32,16 @@ public class QuestionListAdapter extends BaseAdapter {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
+	public QuestionListAdapter(List<Question> questions, Context context,
+			QuestionManagerActions questionManagerActions) {
+		this.context = context;
+		managerAction = questionManagerActions;
+
+		this.setQuestions(questions);
+		inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	}
+
 	private class RemoveQuestionListener implements OnClickListener {
 
 		private Question question;
