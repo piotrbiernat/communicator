@@ -28,7 +28,7 @@ public class QuestionManagerListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		questionDoa = new QuestionDao(getActivity());
+		questionDoa = new QuestionDao(getActivity().getApplicationContext());
 		setListAdapter(new QuestionListAdapter(questionDoa.listAll(),
 				getActivity()));
 	}
