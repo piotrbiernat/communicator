@@ -1,5 +1,6 @@
 package com.pcs.database.tables;
 
+import com.pcs.enums.Day;
 import com.turbomanage.storm.api.Entity;
 
 @Entity
@@ -9,6 +10,7 @@ public class Answer {
 	private String text;
 	private boolean correct;
 	private long questionID;
+	private Day forDay;
 
 	public long getId() {
 		return id;
@@ -48,5 +50,13 @@ public class Answer {
 
 	public void setQuestionID(long questionID) {
 		this.questionID = questionID;
+	}
+
+	public Day getForDay() {
+		return forDay;
+	}
+
+	public void setForDay(Day forDay) {
+		this.forDay = forDay;
 	}
 }

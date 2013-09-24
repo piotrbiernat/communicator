@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
     <TextView
         android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="15dp"
+        android:layout_marginLeft="22dp"
         android:gravity="center_vertical"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
@@ -19,24 +23,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginLeft="8dip"
-        android:layout_marginRight="12dip"
+        android:layout_centerVertical="true"
         android:clickable="true"
         android:contentDescription="@string/edit"
         android:gravity="center_vertical"
-        android:src="@drawable/sys" >
-    </ImageView>
-
-    <ImageView
-        android:id="@+id/tutorButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dip"
-        android:layout_toLeftOf="@+id/deleteAddButton"
-        android:clickable="true"
-        android:contentDescription="@string/tutor"
-        android:gravity="center_vertical"
-        android:src="@drawable/select" >
-    </ImageView>
+        android:src="@drawable/settings" />
 
 </RelativeLayout>

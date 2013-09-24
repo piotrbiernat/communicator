@@ -15,14 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pcs.communicator.CalendarDetailActivity;
-import com.pcs.communicator.CalendarListActivity;
+import com.pcs.communicator.CalendarMaintenanceActivity;
 import com.pcs.communicator.CalendarQuestionActivity;
 import com.pcs.communicator.R;
 import com.pcs.enums.Day;
 import com.pcs.fragments.CalendarDetailFragment;
 
 public class CalendarListAdapter extends BaseAdapter {
-	private final CalendarListActivity activity;
+	private final CalendarMaintenanceActivity activity;
 	private static List<Day> days = new ArrayList<Day>();
 	static {
 		days.add(Day.MONDAY);
@@ -34,28 +34,9 @@ public class CalendarListAdapter extends BaseAdapter {
 		days.add(Day.SUNDAY);
 	}
 
-	public CalendarListAdapter(CalendarListActivity fragment) {
+	public CalendarListAdapter(CalendarMaintenanceActivity fragment) {
 		this.activity = fragment;
 
-	}
-
-	private class TutorOnClickListener implements OnClickListener {
-
-		private Day day;
-
-		public TutorOnClickListener(Day day) {
-			this.day = day;
-
-		}
-
-		@Override
-		public void onClick(View v) {
-			Intent intent = new Intent(activity, CalendarQuestionActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			intent.putExtra(CalendarQuestionActivity.TUTOR_MODE, true);
-			intent.putExtra(CalendarQuestionActivity.DAY_STRING, day);
-			activity.startActivity(intent);
-		}
 	}
 
 	private class EditOnClickListener implements OnClickListener {
@@ -104,16 +85,12 @@ public class CalendarListAdapter extends BaseAdapter {
 		TextView textView = (TextView) rowView.findViewById(R.id.label);
 		ImageView editButton = (ImageView) rowView
 				.findViewById(R.id.deleteAddButton);
-		ImageView tutorButton = (ImageView) rowView
-				.findViewById(R.id.tutorButton);
 
 		Day day = days.get(position);
 
 		textView.setText(activity.getResources().getString(day.getResourceID()));
 
 		editButton.setOnClickListener(new EditOnClickListener(day));
-
-		tutorButton.setOnClickListener(new TutorOnClickListener(day));
 
 		return rowView;
 	}

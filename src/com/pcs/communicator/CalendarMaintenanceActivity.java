@@ -11,15 +11,15 @@ import android.view.MenuItem;
 import com.pcs.enums.Day;
 import com.pcs.fragments.CalendarListFragment;
 
-public class CalendarListActivity extends FragmentActivity implements
+public class CalendarMaintenanceActivity extends FragmentActivity implements
 		CalendarListFragment.Callbacks {
 
-	private boolean mTwoPane = false;
 	public static final String DAY_STRING = "day";
+
+	private boolean mTwoPane = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		getApplicationContext().getResources();
 		super.onCreate(savedInstanceState);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setTitle(R.string.calender);
@@ -54,7 +54,7 @@ public class CalendarListActivity extends FragmentActivity implements
 		switch (item.getItemId()) {
 		case R.id.manager_button:
 
-			Intent intent = new Intent(CalendarListActivity.this,
+			Intent intent = new Intent(CalendarMaintenanceActivity.this,
 					QuestionManagerActivity.class);
 			startActivity(intent);
 			return true;

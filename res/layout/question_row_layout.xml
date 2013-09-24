@@ -3,29 +3,36 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/label"
+    <RelativeLayout
+        android:id="@+id/question_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:minHeight="?android:attr/listPreferredItemHeightSmall"
-        android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
-        android:paddingRight="?android:attr/listPreferredItemPaddingRight"
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:textColor="#000000" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true" >
 
-    <ImageView
-        android:id="@+id/deleteAddButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="false"
-        android:layout_margin="5dp"
-        android:clickable="true"
-        android:contentDescription="@string/edit"
-        android:gravity="center_vertical"
-        android:src="@drawable/select" />
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+            android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:textColor="#000000" />
 
+        <ImageView
+            android:id="@+id/deleteAddButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="5dp"
+            android:clickable="true"
+            android:contentDescription="@string/edit"
+            android:gravity="center_vertical"
+            android:src="@drawable/select" />
+
+    </RelativeLayout>
 </RelativeLayout>

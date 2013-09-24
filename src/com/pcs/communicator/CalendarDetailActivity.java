@@ -31,9 +31,9 @@ public class CalendarDetailActivity extends FragmentActivity {
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
 			arguments.putSerializable(
-					CalendarListActivity.DAY_STRING,
+					CalendarMaintenanceActivity.DAY_STRING,
 					getIntent().getSerializableExtra(
-							CalendarListActivity.DAY_STRING));
+							CalendarMaintenanceActivity.DAY_STRING));
 			CalendarDetailFragment fragment = new CalendarDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
@@ -47,7 +47,7 @@ public class CalendarDetailActivity extends FragmentActivity {
 
 		case android.R.id.home:
 			NavUtils.navigateUpTo(this, new Intent(this,
-					CalendarListActivity.class));
+					CalendarMaintenanceActivity.class));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

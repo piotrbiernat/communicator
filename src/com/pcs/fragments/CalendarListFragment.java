@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.pcs.adapter.CalendarListAdapter;
-import com.pcs.communicator.CalendarListActivity;
+import com.pcs.communicator.CalendarMaintenanceActivity;
 import com.pcs.enums.Day;
 
 /**
@@ -39,7 +39,7 @@ public class CalendarListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setListAdapter(new CalendarListAdapter(
-				(CalendarListActivity) getActivity()));
+				(CalendarMaintenanceActivity) getActivity()));
 	}
 
 	@Override

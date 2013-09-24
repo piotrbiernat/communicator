@@ -29,9 +29,9 @@ public class QuestionManagerDetailActivity extends FragmentActivity {
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
 			arguments.putSerializable(
-					CalendarListActivity.DAY_STRING,
+					CalendarMaintenanceActivity.DAY_STRING,
 					getIntent().getSerializableExtra(
-							CalendarListActivity.DAY_STRING));
+							CalendarMaintenanceActivity.DAY_STRING));
 			QuestionManagerMaintainerFragment fragment = new QuestionManagerMaintainerFragment();
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.question_detail_container, fragment).commit();

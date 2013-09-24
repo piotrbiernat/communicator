@@ -4,28 +4,63 @@ import java.io.IOException;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.pcs.communicator.R;
+import com.pcs.database.query.AnswersQuery;
 import com.pcs.database.tables.Answer;
+import com.pcs.database.tables.ImageContent;
+import com.pcs.database.tables.dao.ImageContentDao;
+import com.pcs.enums.Day;
+import com.pcs.fragments.GalleryDialogFragment;
+import com.pcs.fragments.GalleryDialogFragment.GalleryDialogSelection;
 import com.pcs.utils.AssetImageManager;
 
-public class AnswerListAdapter extends BaseAdapter {
+public class AnswerListAdapter extends BaseAdapter implements
+		GalleryDialogSelection {
 
 	private List<Answer> answers;
 	private LayoutInflater inflater;
 	private AssetImageManager assetManager;
+	private long questionId;
+	private Day day;
+	private FragmentActivity context;
+	private AnswersQuery answerQuery;
 
-	public AnswerListAdapter(List<Answer> answers, Context context) {
+
+	public class Tag {
+		public ImageView image;
+	}
+
+	public AnswerListAdapter(List<Answer> answers, long questionId, Day day,
+			FragmentActivity context, AnswersQuery answerQuery) {
+		this.questionId = questionId;
+		this.day = day;
+		this.context = context;
+		this.answerQuery = answerQuery;
 		this.setAnswers(answers);
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		assetManager = new AssetImageManager(context);
+	}
+
+	private class AddAnswer implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			GalleryDialogFragment newFragment = new GalleryDialogFragment();
+			newFragment.setGalleryDialogSelection(AnswerListAdapter.this);
+			newFragment.setImageContentDao(new ImageContentDao(context));
+			newFragment.show(context.getSupportFragmentManager(),
+					"GalleryDialogFragment");
+		}
 	}
 
 	@Override
@@ -45,31 +80,34 @@ public class AnswerListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		View rowView = convertView;
+		Tag tag;
+		if (rowView == null) {
+			rowView = inflater.inflate(R.layout.answer_row_layout, parent, false);
+			tag = new Tag();
+			tag.image = (ImageView) rowView.findViewById(R.id.answer_image);
+			rowView.setTag(tag);
+		}
+		tag = (Tag) rowView.getTag();
+		ImageView answerImage = tag.image;
 		if (position == 0) {
-			View rowView = inflater.inflate(R.layout.question_row_layout,
-					parent, false);
-			TextView textView = (TextView) rowView.findViewById(R.id.label);
-			textView.setText(R.string.addNew);
-			ImageView addButton = (ImageView) rowView
-					.findViewById(R.id.deleteAddButton);
-			addButton.setImageResource(android.R.drawable.ic_menu_add);
-			return rowView;
-		} else {
-			View rowView = inflater.inflate(R.layout.answer_row_layout,
-					parent, false);
-			ImageView answerImage = (ImageView) rowView
-					.findViewById(R.id.answer_image);
+			answerImage.setImageResource(R.drawable.add);
+			answerImage.setOnClickListener(new AddAnswer());
+		} else if (position > 0) {
+
 			Answer answer = getItem(position);
 			try {
-				answerImage.setImageDrawable(assetManager.getResizeImage(answer
-						.getLink()));
+				answerImage.setImageDrawable(assetManager.getResizeImage((answer.getLink())));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			return rowView;
+			if (answer.isCorrect()) {
+				rowView.setBackgroundColor(Color.BLUE);
+			} else {
+				rowView.setBackgroundDrawable(null);
+			}
 		}
+		return rowView;
 	}
 
 	public List<Answer> getAnswers() {
@@ -84,6 +122,24 @@ public class AnswerListAdapter extends BaseAdapter {
 	public void setAnswers(List<Answer> answers) {
 		this.answers = answers;
 		notifyDataSetChanged();
+	}
+
+	@Override
+	public void selectedImages(List<ImageContent> imagesContent) {
+		for (ImageContent imageContent : imagesContent) {
+			Answer createAnswer = createAnswer(imageContent.getImageLink());
+			answerQuery.insert(createAnswer);
+			this.answers.add(createAnswer);
+		}
+		notifyDataSetChanged();
+	}
+
+	private Answer createAnswer(String imageLink) {
+		Answer resultAnswer = new Answer();
+		resultAnswer.setLink(imageLink);
+		resultAnswer.setForDay(day);
+		resultAnswer.setQuestionID(questionId);
+		return resultAnswer;
 	}
 
 }

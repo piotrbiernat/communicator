@@ -3,30 +3,45 @@
     style="?android:attr/textAppearanceLarge"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightGray"
     android:padding="16dp"
     android:textIsSelectable="true" >
 
     <!-- HEADER -->
 
-    <TextView
-        android:id="@+id/calendar_detail"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" 
-        android:layout_marginBottom="4dip"
-        android:textSize="20sp"/>
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/imageButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/add" />
+
+        <TextView
+            android:id="@+id/calendar_detail_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="Poniedzialek"
+            android:textSize="20sp" />
+    </RelativeLayout>
 
     <!-- MAIN PART -->
 
-    <ListView
-        android:id="@+id/questions_for_day"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/calendar_detail"
-        android:background="#EAEAEA"
-        android:orientation="vertical"
-        android:paddingBottom="8sp" >
-    </ListView>
+    <ExpandableListView
+        android:id="@+id/question_list_with_answers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:layout_alignLeft="@+id/relativeLayout1"
+        android:background="@drawable/expandable_background"
+        android:layout_below="@+id/relativeLayout1" >
+    </ExpandableListView>
 
 </RelativeLayout>
