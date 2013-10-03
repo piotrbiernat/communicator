@@ -79,6 +79,7 @@ public class CalendarDetailFragment extends Fragment implements
 				v.startAnimation(animHide);
 				v.setVisibility(View.GONE);
 				imageView.setImageResource(R.drawable.bin);
+				adapter.update();
 				break;
 			case DragEvent.ACTION_DRAG_ENDED:
 				v.startAnimation(animHide);
