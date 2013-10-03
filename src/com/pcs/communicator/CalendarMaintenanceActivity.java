@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.pcs.enums.Day;
+import com.pcs.fragments.CalendarDetailFragment;
 import com.pcs.fragments.CalendarListFragment;
 
 public class CalendarMaintenanceActivity extends FragmentActivity implements
@@ -43,10 +44,25 @@ public class CalendarMaintenanceActivity extends FragmentActivity implements
 
 	@Override
 	public void onItemSelected(Day day) {
+		if (mTwoPane) {
+			// In two-pane mode, show the detail view in this activity by
+			// adding or replacing the detail fragment using a
+			// fragment transaction.
+			Bundle arguments = new Bundle();
+			arguments.putSerializable(CalendarQuestionActivity.DAY_STRING, day);
+			CalendarDetailFragment fragment = new CalendarDetailFragment();
+			fragment.setArguments(arguments);
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.calendar_detail_container, fragment).commit();
 
-		Intent detailIntent = new Intent(this, CalendarQuestionActivity.class);
-		detailIntent.putExtra(DAY_STRING, day);
-		startActivity(detailIntent);
+		} else {
+			// In single-pane mode, simply start the detail activity
+			// for the selected item ID.
+			Intent detailIntent = new Intent(this,
+					CalendarDetailActivity.class);
+			detailIntent.putExtra(CalendarQuestionActivity.DAY_STRING, day);
+			startActivity(detailIntent);
+		}
 	}
 
 	@Override
@@ -71,5 +87,4 @@ public class CalendarMaintenanceActivity extends FragmentActivity implements
 	public boolean isTwoPane() {
 		return mTwoPane;
 	}
-
 }

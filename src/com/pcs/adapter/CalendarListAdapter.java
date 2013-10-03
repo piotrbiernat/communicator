@@ -4,26 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pcs.communicator.CalendarDetailActivity;
-import com.pcs.communicator.CalendarMaintenanceActivity;
-import com.pcs.communicator.CalendarQuestionActivity;
-import com.pcs.communicator.R;
 import com.pcs.enums.Day;
-import com.pcs.fragments.CalendarDetailFragment;
 
 public class CalendarListAdapter extends BaseAdapter {
-	private final CalendarMaintenanceActivity activity;
+	private LayoutInflater inflater;
 	private static List<Day> days = new ArrayList<Day>();
+	private Context ctx;
 	static {
 		days.add(Day.MONDAY);
 		days.add(Day.TUESDAY);
@@ -34,64 +26,31 @@ public class CalendarListAdapter extends BaseAdapter {
 		days.add(Day.SUNDAY);
 	}
 
-	public CalendarListAdapter(CalendarMaintenanceActivity fragment) {
-		this.activity = fragment;
-
+	private class Holder {
+		TextView textView;
 	}
 
-	private class EditOnClickListener implements OnClickListener {
-
-		private Day day;
-
-		public EditOnClickListener(Day day) {
-			this.day = day;
-
-		}
-
-		@Override
-		public void onClick(View v) {
-			if (activity.isTwoPane()) {
-				// In two-pane mode, show the detail view in this activity by
-				// adding or replacing the detail fragment using a
-				// fragment transaction.
-				Bundle arguments = new Bundle();
-				arguments.putSerializable(CalendarQuestionActivity.DAY_STRING,
-						day);
-				CalendarDetailFragment fragment = new CalendarDetailFragment();
-				fragment.setArguments(arguments);
-				activity.getSupportFragmentManager().beginTransaction()
-						.replace(R.id.calendar_detail_container, fragment)
-						.commit();
-
-			} else {
-				// In single-pane mode, simply start the detail activity
-				// for the selected item ID.
-				Intent detailIntent = new Intent(activity,
-						CalendarDetailActivity.class);
-				detailIntent.putExtra(CalendarQuestionActivity.DAY_STRING, day);
-				activity.startActivity(detailIntent);
-			}
-
-		}
+	public CalendarListAdapter(Context ctx) {
+		this.ctx = ctx;
+		inflater = (LayoutInflater) ctx
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		LayoutInflater inflater = (LayoutInflater) activity
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View rowView = inflater.inflate(R.layout.calendar_row_layout, parent,
-				false);
-		TextView textView = (TextView) rowView.findViewById(R.id.label);
-		ImageView editButton = (ImageView) rowView
-				.findViewById(R.id.deleteAddButton);
-
+		View rowView = convertView;
+		if (rowView == null) {
+			rowView = inflater.inflate(android.R.layout.simple_list_item_1,
+					parent, false);
+			Holder h = new Holder();
+			h.textView = (TextView) rowView
+					.findViewById(android.R.id.text1);
+			rowView.setTag(h);
+		}
+		Holder h = (Holder) rowView.getTag();
 		Day day = days.get(position);
-
-		textView.setText(activity.getResources().getString(day.getResourceID()));
-
-		editButton.setOnClickListener(new EditOnClickListener(day));
-
+		h.textView.setText(ctx.getResources().getString(day.getResourceID()));
 		return rowView;
 	}
 

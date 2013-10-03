@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Pair;
@@ -15,6 +16,7 @@ import android.view.View.OnDragListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,7 +24,6 @@ import android.widget.TextView;
 import com.pcs.actions.CalendarDetailActions;
 import com.pcs.adapter.QuestionWithAnswersAdapter;
 import com.pcs.adapter.QuestionWithAnswersAdapter.ViewGroupHolder;
-import com.pcs.communicator.CalendarDetailActivity;
 import com.pcs.communicator.CalendarQuestionActivity;
 import com.pcs.communicator.R;
 import com.pcs.database.query.AnswersQuery;
@@ -33,11 +34,6 @@ import com.pcs.enums.Day;
 import com.pcs.views.DragAndDropExpandableListView;
 import com.pcs.views.DragAndDropExpandableListView.DragDropHandlerListener;
 
-/**
- * A fragment representing a single Day detail screen. This fragment is either
- * contained in a {@link DayListActivity} in two-pane mode (on tablets) or a
- * {@link CalendarDetailActivity} on handsets.
- */
 public class CalendarDetailFragment extends Fragment implements
 		CalendarDetailActions {
 
@@ -104,6 +100,17 @@ public class CalendarDetailFragment extends Fragment implements
 		}
 	}
 	
+	private class BeginClickListener implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			Intent detailIntent = new Intent(getActivity(),
+					CalendarQuestionActivity.class);
+			detailIntent.putExtra(CalendarQuestionActivity.DAY_STRING, day);
+			startActivity(detailIntent);
+		}
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -126,8 +133,7 @@ public class CalendarDetailFragment extends Fragment implements
 		adapter.setCalendarDetailActionsHandler(this);
 		questionsListWithAnswers = (DragAndDropExpandableListView) rootView.findViewById(R.id.question_list_with_answers);
 		questionsListWithAnswers.setAdapter(adapter);
-		questionsListWithAnswers
-				.setDragDropHandlerListener(createDragAndDropListener());
+		questionsListWithAnswers.setDragDropHandlerListener(createDragAndDropListener());
 		if (getActivity().findViewById(R.id.delete_zone) != null) {
 			deleteZone = (FrameLayout) getActivity().findViewById(
 					R.id.delete_zone);
@@ -135,6 +141,9 @@ public class CalendarDetailFragment extends Fragment implements
 			animHide = AnimationUtils.loadAnimation(getActivity(),
 					R.anim.hide_popup);
 		}
+		Button beginButton = (Button) rootView.findViewById(R.id.begin_button);
+		beginButton.setOnClickListener(new BeginClickListener());
+
 		ImageView addQuestion = (ImageView) rootView.findViewById(R.id.addQuestionToDay);
 		addQuestion.setOnClickListener(new AddQuestionListener());
 		return rootView;

@@ -34,5 +34,6 @@
     <color name="testColorBlue">#0000FF</color>
     <string name="save">Zapisz</string>
     <string name="questions_answer_label">Odpowiedzi na pytania</string>
+    <string name="begin">Rozpocznij</string>
 
 </resources>

@@ -12,7 +12,7 @@
         android:id="@+id/relativeLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:padding="10dp" >
 
         <ImageView
             android:id="@+id/addQuestionToDay"
@@ -30,6 +30,14 @@
             android:layout_centerVertical="true"
             android:text="Poniedzialek"
             android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/begin_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/addQuestionToDay"
+            android:layout_centerHorizontal="true"
+            android:text="@string/begin" />
     </RelativeLayout>
 
     <!-- MAIN PART -->
@@ -38,10 +46,10 @@
         android:id="@+id/question_list_with_answers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
         android:layout_alignLeft="@+id/relativeLayout1"
+        android:layout_below="@+id/relativeLayout1"
         android:background="@drawable/expandable_background"
-        android:layout_below="@+id/relativeLayout1" >
+        android:padding="10dp" >
     </com.pcs.views.DragAndDropExpandableListView>
 
 </RelativeLayout>
