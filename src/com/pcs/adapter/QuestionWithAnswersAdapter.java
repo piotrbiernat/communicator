@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.content.ClipData;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -35,8 +34,8 @@ import com.pcs.views.HorizontalListView.OnItemTouch;
 
 public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 
-	private SparseArray<List<Answer>> answersAssignToQuestionId;
 	private List<Question> questions;
+	private SparseArray<Question> questionsWithOrder;
 	private Day day;
 	private LayoutInflater inflater;
 	private FragmentActivity ctx;
@@ -46,10 +45,42 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 	private QuestionQuery questionQuery;
 	private CalendarDetailActions calendarDetailActionsHandler;
 
-	private class ViewGroupHolder {
+	public class ViewGroupHolder {
+		public ImageView getDelete() {
+			return delete;
+		}
+
+		public void setDelete(ImageView delete) {
+			this.delete = delete;
+		}
+
+		public ImageView getEdit() {
+			return edit;
+		}
+
+		public void setEdit(ImageView edit) {
+			this.edit = edit;
+		}
+
+		public TextView getLabel() {
+			return label;
+		}
+
+		public void setLabel(TextView label) {
+			this.label = label;
+		}
+
+		public Question getQuestion() {
+			return question;
+		}
+
+		public void setQuestion(Question question) {
+			this.question = question;
+		}
 		ImageView delete;
 		ImageView edit;
 		TextView label;
+		Question question;
 	}
 
 	private class ViewChildHolder {
@@ -63,12 +94,20 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 		this.questionQuery = questionQuery;
 		this.answerQuery = answerQuery;
 		this.day = day;
-		questions = questionQuery.findQuestionForDay(day);
+		updateSparseArray();
 		inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		deletZone = (FrameLayout) ctx.findViewById(R.id.delete_zone);
 		animShow = AnimationUtils.loadAnimation(ctx, R.anim.show_popup);
 		if (ctx instanceof CalendarDetailActions) {
 			setCalendarDetailActionsHandler((CalendarDetailActions) ctx);
+		}
+	}
+
+	private void updateSparseArray() {
+		questions = questionQuery.findQuestionsForDay(day);
+		questionsWithOrder = new SparseArray<Question>();
+		for (Question question : questions) {
+			questionsWithOrder.append(question.getOrderForDay(day), question);
 		}
 	}
 
@@ -118,14 +157,18 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 
 		@Override
 		public void itemClick(View view, int position) {
-			Answer answer = answerListAdapter.getItem(position);
-			if (answer.isCorrect()) {
-				view.setBackgroundDrawable(null);
-			} else {
-				view.setBackgroundColor(Color.BLUE);
+			if (position > 0) {
+				ImageView isCorrect = (ImageView) view
+						.findViewById(R.id.is_correct);
+				Answer answer = answerListAdapter.getItem(position);
+				if (answer.isCorrect()) {
+					isCorrect.setVisibility(View.INVISIBLE);
+				} else {
+					isCorrect.setVisibility(View.VISIBLE);
+				}
+				answer.setCorrect(!answer.isCorrect());
+				answerQuery.update(answer);
 			}
-			answer.setCorrect(!answer.isCorrect());
-			answerQuery.update(answer);
 		}
 	}
 
@@ -141,8 +184,9 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 				DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
 				v.startDrag(data, shadowBuilder, v, 0);
 				v.setVisibility(View.INVISIBLE);
+				return true;
 			}
-			return true;
+			return false;
 		}
 	}
 
@@ -172,13 +216,17 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public Object getGroup(int groupPosition) {
-		return questions.get(groupPosition);
+		return questionsWithOrder.get(groupPosition + 1);
 	}
 
 	@Override
 	public Object getChild(int groupPosition, int childPosition) {
-		Question question = questions.get(groupPosition);
-		return answersAssignToQuestionId.get((int) question.getId());
+		Question question = (Question) getGroup(groupPosition);
+
+		Answer exampleObj = new Answer();
+		exampleObj.setQuestionID(question.getId());
+		List<Answer> answers = answerQuery.listByExample(exampleObj);
+		return answers;
 	}
 
 	@Override
@@ -203,13 +251,15 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 			holder.delete = (ImageView) view.findViewById(R.id.deleteAddButton);
 			holder.edit = (ImageView) view.findViewById(R.id.editQuestion);
 			holder.label = (TextView) view.findViewById(R.id.label);
+			// view.setOnDragListener(new DragListener());
 			view.setTag(holder);
 		}
-		Question question = questions.get(groupPosition);
+		Question question = (Question) getGroup(groupPosition);
 		ViewGroupHolder holder = (ViewGroupHolder) view.getTag();
 		holder.delete.setOnClickListener(new OnClickDeleteQuestion(groupPosition));
 		holder.edit.setOnClickListener(new OnClickEditQuestion(groupPosition));
 		holder.label.setText(question.getText());
+		holder.question = question;
 		return view;
 	}
 
@@ -224,13 +274,11 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 					.findViewById(R.id.horizontalScrollView1);
 			view.setTag(holder);
 		}
-		Question question = questions.get(groupPosition);
-
-		Answer exampleObj = new Answer();
-		exampleObj.setQuestionID(question.getId());
+		Question question = (Question) getGroup(groupPosition);
 
 		ViewChildHolder holder = (ViewChildHolder) view.getTag();
-		List<Answer> answers = answerQuery.listByExample(exampleObj);
+		@SuppressWarnings("unchecked")
+		List<Answer> answers = (List<Answer>) getChild(groupPosition, childPosition);
 		AnswerListAdapter adapter = new AnswerListAdapter(answers,
 				question.getId(), day, ctx, answerQuery);
 		holder.hlv.setAdapter(adapter);
@@ -246,8 +294,7 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 	}
 	
 	public void update() {
-		questions = questionQuery.findQuestionForDay(day);
-		answersAssignToQuestionId = answerQuery.findAnswersForQuestionsAndDay(questions, day);
+		updateSparseArray();
 		notifyDataSetChanged();
 	}
 

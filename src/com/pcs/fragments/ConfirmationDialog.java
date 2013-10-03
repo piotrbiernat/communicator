@@ -13,6 +13,7 @@ public class ConfirmationDialog extends DialogFragment {
 
 	private ConfirmationActions confirmationActions;
 	private Object onPositivArgument;
+	private String questionText;
 
 	public interface ConfirmationActions {
 		public void onPositiveConfirmation(Object onPositivArgument);
@@ -22,7 +23,10 @@ public class ConfirmationDialog extends DialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// Use the Builder class for convenient dialog construction
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setMessage(R.string.deleteConfirmation)
+		String message = getActivity().getString(R.string.deleteConfirmation);
+		message += getQuestionText() != null ? " \"" + getQuestionText() + "\""
+				: "";
+		builder.setMessage(message)
 				.setPositiveButton(R.string.yesString,
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
@@ -35,6 +39,9 @@ public class ConfirmationDialog extends DialogFragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+		if (activity instanceof ConfirmationActions) {
+			confirmationActions = (ConfirmationActions) activity;
+		}
 	}
 
 	public ConfirmationActions getConfirmationActions() {
@@ -51,6 +58,14 @@ public class ConfirmationDialog extends DialogFragment {
 
 	public void setOnPositivArgument(Object onPositivArgument) {
 		this.onPositivArgument = onPositivArgument;
+	}
+
+	public String getQuestionText() {
+		return questionText;
+	}
+
+	public void setQuestionText(String questionText) {
+		this.questionText = questionText;
 	}
 
 }

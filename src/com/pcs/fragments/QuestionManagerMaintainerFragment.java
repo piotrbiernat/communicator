@@ -18,9 +18,9 @@ import android.widget.ListView;
 import com.pcs.adapter.AssignForDayAdapter;
 import com.pcs.communicator.QuestionManagerActivity;
 import com.pcs.communicator.R;
+import com.pcs.database.query.QuestionQuery;
 import com.pcs.database.tables.ImageContent;
 import com.pcs.database.tables.Question;
-import com.pcs.database.tables.dao.QuestionDao;
 import com.pcs.fragments.GalleryDialogFragment.GalleryDialogSelection;
 
 public class QuestionManagerMaintainerFragment extends Fragment implements
@@ -30,7 +30,7 @@ public class QuestionManagerMaintainerFragment extends Fragment implements
 
 	private EditText questionContent;
 	private Button saveButton;
-	private QuestionDao questionDoa;
+	private QuestionQuery questionDoa;
 	private Question question;
 	private boolean isNew;
 	private String questionText;
@@ -78,7 +78,7 @@ public class QuestionManagerMaintainerFragment extends Fragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle extras = getActivity().getIntent().getExtras();
-		questionDoa = new QuestionDao(getActivity());
+		questionDoa = new QuestionQuery(getActivity());
 		if (getArguments() != null) {
 			Long id = getArguments().getLong(QUESTION_ID);
 			question = questionDoa.get(id);

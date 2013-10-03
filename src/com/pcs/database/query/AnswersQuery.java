@@ -18,9 +18,28 @@ public class AnswersQuery extends AnswerDao {
 		super(ctx);
 	}
 
+	public void deleteAllAnswersAsociated2QuestionForDay(Question question, Day day) {
+		Answer exampleObj = new Answer();
+		exampleObj.setQuestionID(question.getId());
+		exampleObj.setForDay(day);
+		List<Answer> asociatedAnswers = listByExample(exampleObj);
+		for (Answer answer : asociatedAnswers) {
+			delete(answer.getId());
+		}
+	}
+	
 	public void deleteAllAnswersAsociated2Question(Question question) {
 		Answer exampleObj = new Answer();
 		exampleObj.setQuestionID(question.getId());
+		List<Answer> asociatedAnswers = listByExample(exampleObj);
+		for (Answer answer : asociatedAnswers) {
+			delete(answer.getId());
+		}
+	}
+
+	public void deleteAllAnswersAsociated2Question(long questionId) {
+		Answer exampleObj = new Answer();
+		exampleObj.setQuestionID(questionId);
 		List<Answer> asociatedAnswers = listByExample(exampleObj);
 		for (Answer answer : asociatedAnswers) {
 			delete(answer.getId());

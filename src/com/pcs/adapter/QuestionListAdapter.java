@@ -83,7 +83,7 @@ public class QuestionListAdapter extends BaseAdapter {
 			textView.setText(R.string.addNew);
 			ImageView addButton = (ImageView) rowView
 					.findViewById(R.id.deleteAddButton);
-			addButton.setImageResource(android.R.drawable.ic_menu_add);
+			addButton.setImageResource(R.drawable.add);
 			return rowView;
 		} else {
 			View rowView = inflater.inflate(R.layout.question_row_layout,
@@ -91,7 +91,7 @@ public class QuestionListAdapter extends BaseAdapter {
 			TextView textView = (TextView) rowView.findViewById(R.id.label);
 			ImageView deleteButton = (ImageView) rowView
 					.findViewById(R.id.deleteAddButton);
-			deleteButton.setImageResource(android.R.drawable.ic_menu_delete);
+			deleteButton.setImageResource(R.drawable.bin_small);
 			deleteButton.setOnClickListener(new RemoveQuestionListener(
 					(Question) getItem(position)));
 			Question question = getItem(position);

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +36,7 @@ public class AnswerListAdapter extends BaseAdapter implements
 
 	public class Tag {
 		public ImageView image;
+		public ImageView isCorrect;
 	}
 
 	public AnswerListAdapter(List<Answer> answers, long questionId, Day day,
@@ -86,6 +86,7 @@ public class AnswerListAdapter extends BaseAdapter implements
 			rowView = inflater.inflate(R.layout.answer_row_layout, parent, false);
 			tag = new Tag();
 			tag.image = (ImageView) rowView.findViewById(R.id.answer_image);
+			tag.isCorrect = (ImageView) rowView.findViewById(R.id.is_correct);
 			rowView.setTag(tag);
 		}
 		tag = (Tag) rowView.getTag();
@@ -102,9 +103,9 @@ public class AnswerListAdapter extends BaseAdapter implements
 				e.printStackTrace();
 			}
 			if (answer.isCorrect()) {
-				rowView.setBackgroundColor(Color.BLUE);
+				tag.isCorrect.setVisibility(View.VISIBLE);
 			} else {
-				rowView.setBackgroundDrawable(null);
+				tag.isCorrect.setVisibility(View.INVISIBLE);
 			}
 		}
 		return rowView;

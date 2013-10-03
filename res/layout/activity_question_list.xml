@@ -5,20 +5,6 @@
     android:orientation="vertical"
     tools:context=".CalendarMaintenanceActivity" >
 
-    <FrameLayout
-        android:id="@+id/delete_zone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" >
-
-        <ImageView
-            android:id="@+id/delete_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|clip_horizontal"
-            android:src="@drawable/bin" />
-    </FrameLayout>
-
     <fragment
         android:id="@+id/question_list"
         android:name="com.pcs.fragments.QuestionManagerListFragment"

@@ -25,7 +25,7 @@
     <string name="addNew">Dodaj nowe</string>
     <string name="yesString">Tak</string>
     <string name="noString">Nie</string>
-    <string name="deleteConfirmation">Czy na pewno chcesz usunąć wybrane pytanie?</string>
+    <string name="deleteConfirmation">Czy na pewno chcesz usunąć pytanie: </string>
     <string name="emptyQuestion">Wpisz treść pytania</string>
         
     <color name="lightGray">#B0B0B0</color>

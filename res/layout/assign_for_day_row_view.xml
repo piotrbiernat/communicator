@@ -8,6 +8,8 @@
         android:id="@+id/assignForDayCheckbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="CheckBox" />
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:text="CheckBox"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall" />
 
 </LinearLayout>

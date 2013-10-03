@@ -7,15 +7,21 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+import com.pcs.database.query.AnswersQuery;
+import com.pcs.database.tables.Question;
 import com.pcs.database.tables.dao.QuestionDao;
+import com.pcs.fragments.ConfirmationDialog;
+import com.pcs.fragments.ConfirmationDialog.ConfirmationActions;
+import com.pcs.fragments.QuestionManagerListFragment;
 import com.pcs.fragments.QuestionManagerListFragment.QuestionManagerActions;
 import com.pcs.fragments.QuestionManagerMaintainerFragment;
 
 public class QuestionManagerActivity extends FragmentActivity implements
-		QuestionManagerActions {
+		QuestionManagerActions, ConfirmationActions {
 
 	private boolean mTwoPane;
 	private QuestionDao questionDao;
+	private AnswersQuery answerQuery;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +32,7 @@ public class QuestionManagerActivity extends FragmentActivity implements
 
 		setContentView(R.layout.activity_question_list);
 		questionDao = new QuestionDao(getApplicationContext());
+		answerQuery = new AnswersQuery(this);
 		if (findViewById(R.id.question_detail_container) != null) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 			mTwoPane = true;
@@ -66,11 +73,11 @@ public class QuestionManagerActivity extends FragmentActivity implements
 
 	@Override
 	public void deleteQuestion(long questionId) {
-		// ConfirmationDialog dialogF = new ConfirmationDialog();
-		// dialogF.setQuestionId(questionId);
-		// dialogF.setQuestionDao(questionDao);
-		// dialogF.setFragmentManager(getSupportFragmentManager());
-		// dialogF.show(getFragmentManager(), "tag?");
+		Question q = questionDao.get(questionId);
+		ConfirmationDialog dialog = new ConfirmationDialog();
+		dialog.setOnPositivArgument(questionId);
+		dialog.setQuestionText(q.getText());
+		dialog.show(getFragmentManager(), "ConfirmationDialog");
 	}
 
 	@Override
@@ -83,5 +90,18 @@ public class QuestionManagerActivity extends FragmentActivity implements
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onPositiveConfirmation(Object onPositivArgument) {
+		if (onPositivArgument instanceof Long) {
+			Long questionId = (Long) onPositivArgument;
+			questionDao.delete(questionId);
+			answerQuery.deleteAllAnswersAsociated2Question(questionId);
+			if (mTwoPane) {
+				QuestionManagerListFragment  listFragment = (QuestionManagerListFragment) getSupportFragmentManager().findFragmentById(R.id.question_list);
+				listFragment.updateQuestionList();
+			}
+		}
 	}
 }
