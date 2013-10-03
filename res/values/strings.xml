@@ -33,5 +33,6 @@
     <color name="testColorRed">#FF0000</color>
     <color name="testColorBlue">#0000FF</color>
     <string name="save">Zapisz</string>
+    <string name="questions_answer_label">Odpowiedzi na pytania</string>
 
 </resources>
