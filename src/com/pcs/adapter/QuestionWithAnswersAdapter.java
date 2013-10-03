@@ -225,6 +225,7 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 
 		Answer exampleObj = new Answer();
 		exampleObj.setQuestionID(question.getId());
+		exampleObj.setForDay(day);
 		List<Answer> answers = answerQuery.listByExample(exampleObj);
 		return answers;
 	}
