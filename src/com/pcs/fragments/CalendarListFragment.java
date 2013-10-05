@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.pcs.adapter.CalendarListAdapter;
 import com.pcs.communicator.CalendarMaintenanceActivity;
+import com.pcs.communicator.R;
 import com.pcs.enums.Day;
 
 /**
@@ -20,6 +21,7 @@ public class CalendarListFragment extends ListFragment {
 
 	ArrayList<String> list;
 	private Callbacks mCallbacks = sDummyCallbacks;
+	private View lastSelectedListItem;
 
 	public interface Callbacks {
 
@@ -45,6 +47,7 @@ public class CalendarListFragment extends ListFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		getListView().setSelector(R.drawable.selecte_state_background);
 	}
 
 	@Override
@@ -72,9 +75,7 @@ public class CalendarListFragment extends ListFragment {
 	public void onListItemClick(ListView listView, View view, int position,
 			long id) {
 		super.onListItemClick(listView, view, position, id);
-
-		// Notify the active callbacks interface (the activity, if the
-		// fragment is attached to one) that an item has been selected.
+		listView.setItemChecked(position, true);
 		mCallbacks.onItemSelected((Day) getListAdapter().getItem(position));
 	}
 
@@ -88,5 +89,15 @@ public class CalendarListFragment extends ListFragment {
 		getListView().setChoiceMode(
 				activateOnItemClick ? ListView.CHOICE_MODE_SINGLE
 						: ListView.CHOICE_MODE_NONE);
+	}
+
+	public void setDay(Day day) {
+		for (int i = 0; i < getListAdapter().getCount(); i++) {
+			Day currentDay = (Day) getListAdapter().getItem(i);
+			if (currentDay == day) {
+				getListView().setItemChecked(i, true);
+				return;
+			}
+		}
 	}
 }

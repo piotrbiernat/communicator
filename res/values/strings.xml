@@ -22,16 +22,11 @@
     <string name="questions_manager">Manager pytań</string>    
     <string name="question_edition">Edycja pytania</string>    
     <string name="settings">Ustawienia</string>
-    <string name="addNew">Dodaj nowe</string>
+    <string name="addNew">Dodaj</string>
     <string name="yesString">Tak</string>
     <string name="noString">Nie</string>
     <string name="deleteConfirmation">Czy na pewno chcesz usunąć pytanie: </string>
     <string name="emptyQuestion">Wpisz treść pytania</string>
-        
-    <color name="lightGray">#B0B0B0</color>
-    <color name="selected">#bfbdf1</color>
-    <color name="testColorRed">#FF0000</color>
-    <color name="testColorBlue">#0000FF</color>
     <string name="save">Zapisz</string>
     <string name="questions_answer_label">Odpowiedzi na pytania</string>
     <string name="begin">Rozpocznij</string>

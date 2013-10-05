@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="lightGray">#B0B0B0</color>
+    <color name="selected">#bfbdf1</color>
+    <color name="testColorRed">#FF0000</color>
+    <color name="testColorBlue">#0000FF</color>
+    
+    <color name="state_selected">#99CC00</color>
+    <color name="state_pressed">#c2ed3d</color>
+</resources>

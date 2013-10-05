@@ -19,7 +19,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.pcs.actions.CalendarDetailActions;
 import com.pcs.adapter.QuestionWithAnswersAdapter;
@@ -125,9 +124,7 @@ public class CalendarDetailFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_calendar_detail,
 				container, false);
-		((TextView) rootView.findViewById(R.id.calendar_detail_text))
-				.setText(getActivity().getResources().getString(
-						day.getResourceID()));
+		updateTitle();
 		adapter = new QuestionWithAnswersAdapter(getActivity(), questionQuery,
 				answerQuery, day);
 		adapter.setCalendarDetailActionsHandler(this);
@@ -144,7 +141,7 @@ public class CalendarDetailFragment extends Fragment implements
 		Button beginButton = (Button) rootView.findViewById(R.id.begin_button);
 		beginButton.setOnClickListener(new BeginClickListener());
 
-		ImageView addQuestion = (ImageView) rootView.findViewById(R.id.addQuestionToDay);
+		Button addQuestion = (Button) rootView.findViewById(R.id.addQuestionToDay);
 		addQuestion.setOnClickListener(new AddQuestionListener());
 		return rootView;
 	}
@@ -274,5 +271,11 @@ public class CalendarDetailFragment extends Fragment implements
 				handelDrag(selectedView, dropAreaView);
 			}
 		};
+	}
+
+	private void updateTitle() {
+		String title = getActivity().getResources().getString(R.string.calender);
+		title += " - " + getActivity().getResources().getString(day.getResourceID());
+		getActivity().getActionBar().setTitle(title);
 	}
 }

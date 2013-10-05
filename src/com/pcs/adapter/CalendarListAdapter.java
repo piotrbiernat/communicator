@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.pcs.communicator.R;
 import com.pcs.enums.Day;
 
 public class CalendarListAdapter extends BaseAdapter {
@@ -47,6 +48,7 @@ public class CalendarListAdapter extends BaseAdapter {
 			h.textView = (TextView) rowView
 					.findViewById(android.R.id.text1);
 			rowView.setTag(h);
+			rowView.setBackgroundResource(R.drawable.selecte_state_background);
 		}
 		Holder h = (Holder) rowView.getTag();
 		Day day = days.get(position);

@@ -14,30 +14,27 @@
         android:layout_height="wrap_content"
         android:padding="10dp" >
 
-        <ImageView
+        <Button
             android:id="@+id/addQuestionToDay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/add" />
-
-        <TextView
-            android:id="@+id/calendar_detail_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:text="Poniedzialek"
-            android:textSize="20sp" />
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/add"
+            android:text="@string/addNew" />
 
         <Button
             android:id="@+id/begin_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/addQuestionToDay"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/begin"
             android:text="@string/begin" />
+            
+
     </RelativeLayout>
 
     <!-- MAIN PART -->
