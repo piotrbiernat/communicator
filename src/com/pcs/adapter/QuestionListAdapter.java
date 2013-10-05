@@ -84,6 +84,7 @@ public class QuestionListAdapter extends BaseAdapter {
 			ImageView addButton = (ImageView) rowView
 					.findViewById(R.id.deleteAddButton);
 			addButton.setImageResource(R.drawable.add);
+			addButton.setClickable(false);
 			return rowView;
 		} else {
 			View rowView = inflater.inflate(R.layout.question_row_layout,
