@@ -252,7 +252,6 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 			holder.delete = (ImageView) view.findViewById(R.id.deleteAddButton);
 			holder.edit = (ImageView) view.findViewById(R.id.editQuestion);
 			holder.label = (TextView) view.findViewById(R.id.label);
-			// view.setOnDragListener(new DragListener());
 			view.setTag(holder);
 		}
 		Question question = (Question) getGroup(groupPosition);

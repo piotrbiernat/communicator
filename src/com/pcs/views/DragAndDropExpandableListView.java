@@ -2,12 +2,13 @@ package com.pcs.views;
 
 import android.content.ClipData;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.DragEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+
+import com.pcs.communicator.R;
 
 public class DragAndDropExpandableListView extends ExpandableListView{
 
@@ -46,7 +47,7 @@ public class DragAndDropExpandableListView extends ExpandableListView{
 				}
 				return false;
 			case DragEvent.ACTION_DRAG_ENTERED:
-				dropAreaView.setBackgroundColor(Color.GRAY);
+				dropAreaView.setBackgroundResource(R.color.state_pressed);
 				break;
 			case DragEvent.ACTION_DRAG_EXITED:
 				dropAreaView.setBackgroundDrawable(null);
