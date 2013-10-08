@@ -129,6 +129,7 @@ public class CalendarDetailFragment extends Fragment implements
 				answerQuery, day);
 		adapter.setCalendarDetailActionsHandler(this);
 		questionsListWithAnswers = (DragAndDropExpandableListView) rootView.findViewById(R.id.question_list_with_answers);
+		questionsListWithAnswers.setHeaderTitle(getHeaderTitle());
 		questionsListWithAnswers.setAdapter(adapter);
 		questionsListWithAnswers.setDragDropHandlerListener(createDragAndDropListener());
 		if (getActivity().findViewById(R.id.delete_zone) != null) {
@@ -144,6 +145,12 @@ public class CalendarDetailFragment extends Fragment implements
 		Button addQuestion = (Button) rootView.findViewById(R.id.addQuestionToDay);
 		addQuestion.setOnClickListener(new AddQuestionListener());
 		return rootView;
+	}
+
+	private String getHeaderTitle() {
+		String headerTitle = getActivity().getString(R.string.title_calendar_detail);
+		headerTitle += " " + getActivity().getString(day.getResourceID());
+		return headerTitle;
 	}
 
 	@Override
@@ -278,4 +285,5 @@ public class CalendarDetailFragment extends Fragment implements
 		title += " - " + getActivity().getResources().getString(day.getResourceID());
 		getActivity().getActionBar().setTitle(title);
 	}
+
 }

@@ -1,5 +1,6 @@
 package com.pcs.database.query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -21,7 +22,16 @@ public class QuestionQuery extends QuestionDao {
 	public static final String SUNDAY = QuestionTable.Columns.SUNDAY.toString();
 	public static final String SATURDAY = QuestionTable.Columns.SATURDAY.toString();
 
-	
+	private static List<Day> days = new ArrayList<Day>();
+	static {
+		days.add(Day.MONDAY);
+		days.add(Day.TUESDAY);
+		days.add(Day.WEDNESDAY);
+		days.add(Day.THURSDAY);
+		days.add(Day.FRIDAY);
+		days.add(Day.SATURDAY);
+		days.add(Day.SUNDAY);
+	}
 
 	public QuestionQuery(Context ctx) {
 		super(ctx);
@@ -53,6 +63,39 @@ public class QuestionQuery extends QuestionDao {
 	public long update(Question question) {
 		synchronizeOrderForDay(question);
 		return super.update(question);
+	}
+
+	@Override
+	public int delete(Long id) {
+		synchronizeQuestionsBeforeDelete(id);
+		return super.delete(id);
+	}
+
+	private void synchronizeQuestionsBeforeDelete(Long deletedQuestionId) {
+		Question deletedQuestion = get(deletedQuestionId);
+		List<Question> questions = listAll();
+		for (Question question : questions) {
+			if (question.getId() != deletedQuestionId) {
+				boolean updateNeeded = false;
+				for (Day day : days) {
+					if (checkIfUpdateNeeded(question, deletedQuestion, day)) {
+						question.setOrderForDay(question.getOrderForDay(day) - 1 , day);
+						updateNeeded = true;
+					}
+				}
+				if(updateNeeded) {
+					update(question);
+				}
+			}
+		}
+
+	}
+
+	private boolean checkIfUpdateNeeded(Question question,
+			Question deletedQuestion, Day day) {
+		return deletedQuestion.getOrderForDay(day) != -1
+				&& deletedQuestion.getOrderForDay(day) <= question
+						.getOrderForDay(day);
 	}
 
 	public void synchronizeOrderForDay(Question question) {

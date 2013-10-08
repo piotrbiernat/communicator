@@ -7,12 +7,14 @@ import android.view.DragEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.pcs.communicator.R;
 
 public class DragAndDropExpandableListView extends ExpandableListView{
 
 	private DragDropHandlerListener dragDropHandlerListener;
+	private String headerTitle;
 	public static final String CHANGE_ORDER = "changeOrder";
 
 	public interface DragDropHandlerListener {
@@ -101,5 +103,22 @@ public class DragAndDropExpandableListView extends ExpandableListView{
 	public void setDragDropHandlerListener(
 			DragDropHandlerListener dragDropHandlerListener) {
 		this.dragDropHandlerListener = dragDropHandlerListener;
+	}
+
+	public String getHeaderTitle() {
+		return headerTitle;
+	}
+
+	public void setHeaderTitle(String headerTitle) {
+		this.headerTitle = headerTitle;
+		addHeaderView(prepareHeaderView());
+	}
+
+	private View prepareHeaderView() {
+		View rootView = (View) inflate(getContext(),
+				R.layout.question_with_answer_list_header, null);
+		TextView view = (TextView) rootView.findViewById(R.id.textView1);
+		view.setText(headerTitle);
+		return rootView;
 	}
 }

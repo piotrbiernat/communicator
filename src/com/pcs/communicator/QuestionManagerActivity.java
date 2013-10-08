@@ -8,8 +8,8 @@ import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 import com.pcs.database.query.AnswersQuery;
+import com.pcs.database.query.QuestionQuery;
 import com.pcs.database.tables.Question;
-import com.pcs.database.tables.dao.QuestionDao;
 import com.pcs.fragments.ConfirmationDialog;
 import com.pcs.fragments.ConfirmationDialog.ConfirmationActions;
 import com.pcs.fragments.QuestionManagerListFragment;
@@ -20,7 +20,7 @@ public class QuestionManagerActivity extends FragmentActivity implements
 		QuestionManagerActions, ConfirmationActions {
 
 	private boolean mTwoPane;
-	private QuestionDao questionDao;
+	private QuestionQuery questionQuery;
 	private AnswersQuery answerQuery;
 
 	@Override
@@ -31,7 +31,7 @@ public class QuestionManagerActivity extends FragmentActivity implements
 		getActionBar().setTitle(R.string.questions_manager);
 
 		setContentView(R.layout.activity_question_list);
-		questionDao = new QuestionDao(getApplicationContext());
+		questionQuery = new QuestionQuery(getApplicationContext());
 		answerQuery = new AnswersQuery(this);
 		if (findViewById(R.id.question_detail_container) != null) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -73,7 +73,7 @@ public class QuestionManagerActivity extends FragmentActivity implements
 
 	@Override
 	public void deleteQuestion(long questionId) {
-		Question q = questionDao.get(questionId);
+		Question q = questionQuery.get(questionId);
 		ConfirmationDialog dialog = new ConfirmationDialog();
 		dialog.setOnPositivArgument(questionId);
 		dialog.setQuestionText(q.getText());
@@ -96,7 +96,7 @@ public class QuestionManagerActivity extends FragmentActivity implements
 	public void onPositiveConfirmation(Object onPositivArgument) {
 		if (onPositivArgument instanceof Long) {
 			Long questionId = (Long) onPositivArgument;
-			questionDao.delete(questionId);
+			questionQuery.delete(questionId);
 			answerQuery.deleteAllAnswersAsociated2Question(questionId);
 			if (mTwoPane) {
 				QuestionManagerListFragment  listFragment = (QuestionManagerListFragment) getSupportFragmentManager().findFragmentById(R.id.question_list);
