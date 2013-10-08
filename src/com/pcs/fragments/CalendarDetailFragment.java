@@ -19,11 +19,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.pcs.actions.CalendarDetailActions;
 import com.pcs.adapter.QuestionWithAnswersAdapter;
 import com.pcs.adapter.QuestionWithAnswersAdapter.ViewGroupHolder;
 import com.pcs.communicator.CalendarQuestionActivity;
+import com.pcs.communicator.QuestionManagerActivity;
 import com.pcs.communicator.R;
 import com.pcs.database.query.AnswersQuery;
 import com.pcs.database.query.QuestionQuery;
@@ -42,6 +44,8 @@ public class CalendarDetailFragment extends Fragment implements
 	private DragAndDropExpandableListView questionsListWithAnswers;
 
 	private FrameLayout deleteZone;
+	private RelativeLayout relativeLayout1;
+	private RelativeLayout relativeLayout2;
 	private Animation animHide;
 	private QuestionWithAnswersAdapter adapter;
 
@@ -75,6 +79,7 @@ public class CalendarDetailFragment extends Fragment implements
 				v.setVisibility(View.GONE);
 				imageView.setImageResource(R.drawable.bin);
 				adapter.update();
+				updateVisibility();
 				break;
 			case DragEvent.ACTION_DRAG_ENDED:
 				v.startAnimation(animHide);
@@ -92,10 +97,18 @@ public class CalendarDetailFragment extends Fragment implements
 
 		@Override
 		public void onClick(View v) {
-			QuestionListDialog dialog = new QuestionListDialog();
-			dialog.setDay(day);
-			dialog.setCalendarDetailActions(CalendarDetailFragment.this);
-			dialog.show(getActivity().getSupportFragmentManager(), "QuestionListDialog");
+			List<Question> question = questionQuery.findQuestionWithoutDay(day);
+			if(!question.isEmpty()) {
+				QuestionListDialog dialog = new QuestionListDialog();
+				dialog.setDay(day);
+				dialog.setCalendarDetailActions(CalendarDetailFragment.this);
+				dialog.show(getActivity().getSupportFragmentManager(), "QuestionListDialog");
+			}
+			else {
+				Intent intent = new Intent(getActivity(),
+						QuestionManagerActivity.class);
+				startActivity(intent);
+			}
 		}
 	}
 	
@@ -144,6 +157,13 @@ public class CalendarDetailFragment extends Fragment implements
 
 		Button addQuestion = (Button) rootView.findViewById(R.id.addQuestionToDay);
 		addQuestion.setOnClickListener(new AddQuestionListener());
+		
+		Button addQuestionWhenNoQuestions = (Button) rootView.findViewById(R.id.addQuestionToDayWhenNoQuestions);
+		addQuestionWhenNoQuestions.setOnClickListener(new AddQuestionListener());
+		
+		relativeLayout1 =  (RelativeLayout) rootView.findViewById(R.id.relativeLayout1);
+		relativeLayout2 =  (RelativeLayout) rootView.findViewById(R.id.relativeLayout2);
+		updateVisibility();
 		return rootView;
 	}
 
@@ -175,6 +195,7 @@ public class CalendarDetailFragment extends Fragment implements
 			questionQuery.update(questionWrapper.getQuestion());
 			answerQuery.deleteAllAnswersAsociated2Question(question);
 			adapter.update();
+			updateVisibility();
 		}
 	}
 
@@ -199,6 +220,7 @@ public class CalendarDetailFragment extends Fragment implements
 					oldQuestionWrapper.getQuestion(),
 					newQuestionWrapper.getQuestion());
 			adapter.update();
+			updateVisibility();
 		}
 	}
 
@@ -213,6 +235,7 @@ public class CalendarDetailFragment extends Fragment implements
 			questionQuery.update(questionWrapper.getQuestion());
 		}
 		adapter.update();
+		updateVisibility();
 	}
 
 	@Override
@@ -261,6 +284,7 @@ public class CalendarDetailFragment extends Fragment implements
 			}
 		}
 		adapter.update();
+		updateVisibility();
 	}
 
 	private Question getQuestionFromTag(View v) {
@@ -284,6 +308,18 @@ public class CalendarDetailFragment extends Fragment implements
 		String title = getActivity().getResources().getString(R.string.calender);
 		title += " - " + getActivity().getResources().getString(day.getResourceID());
 		getActivity().getActionBar().setTitle(title);
+	}
+
+	private void updateVisibility() {
+		if (adapter.getGroupCount() > 0) {
+			relativeLayout1.setVisibility(View.VISIBLE);
+			questionsListWithAnswers.setVisibility(View.VISIBLE);
+			relativeLayout2.setVisibility(View.GONE);
+		} else {
+			relativeLayout2.setVisibility(View.VISIBLE);
+			relativeLayout1.setVisibility(View.GONE);
+			questionsListWithAnswers.setVisibility(View.GONE);
+		}
 	}
 
 }

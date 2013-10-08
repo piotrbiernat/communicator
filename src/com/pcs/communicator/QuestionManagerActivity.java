@@ -35,6 +35,9 @@ public class QuestionManagerActivity extends FragmentActivity implements
 		answerQuery = new AnswersQuery(this);
 		if (findViewById(R.id.question_detail_container) != null) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			QuestionManagerMaintainerFragment fragment = new QuestionManagerMaintainerFragment();
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.question_detail_container, fragment).commit();
 			mTwoPane = true;
 		}
 	}
