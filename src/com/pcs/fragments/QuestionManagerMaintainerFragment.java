@@ -1,6 +1,6 @@
 package com.pcs.fragments;
 
-import java.util.List;
+import java.util.Set;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,27 +16,25 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.pcs.adapter.AssignForDayAdapter;
+import com.pcs.adapter.AssignForDayAdapter.CheckDayAction;
 import com.pcs.communicator.QuestionManagerActivity;
 import com.pcs.communicator.R;
 import com.pcs.database.query.QuestionQuery;
-import com.pcs.database.tables.ImageContent;
 import com.pcs.database.tables.Question;
-import com.pcs.fragments.GalleryDialogFragment.GalleryDialogSelection;
+import com.pcs.database.tables.wrappers.QuestionWrapper;
+import com.pcs.enums.Day;
 
 public class QuestionManagerMaintainerFragment extends Fragment implements
-		GalleryDialogSelection {
+		CheckDayAction {
 
 	public static final String QUESTION_ID = "questionId";
 
 	private EditText questionContent;
 	private Button saveButton;
-	private QuestionQuery questionDoa;
+	private QuestionQuery questionQuery;
 	private Question question;
 	private boolean isNew;
 	private String questionText;
-
-	private ListView answersList;
-
 	private ListView assignForDay;
 
 	private class SaveQuestionClickListener implements OnClickListener {
@@ -64,28 +62,29 @@ public class QuestionManagerMaintainerFragment extends Fragment implements
 			}
 		}
 
-		public void saveQuestion() {
-			if (isNew) {
-				questionDoa.insert(question);
-			} else {
-				questionDoa.update(question);
-			}
-		}
+	}
 
+	public void saveQuestion() {
+		if (isNew) {
+			questionQuery.insert(question);
+		} else {
+			questionQuery.update(question);
+		}
+		updateAssignForDayState();
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle extras = getActivity().getIntent().getExtras();
-		questionDoa = new QuestionQuery(getActivity());
+		questionQuery = new QuestionQuery(getActivity());
 		if (getArguments() != null) {
 			Long id = getArguments().getLong(QUESTION_ID);
-			question = questionDoa.get(id);
+			question = questionQuery.get(id);
 			isNew = false;
 		} else if (extras != null) { // phone
 			Long id = extras.getLong(QUESTION_ID);
-			question = questionDoa.get(id);
+			question = questionQuery.get(id);
 			isNew = false;
 		} else {
 			question = new Question();
@@ -105,12 +104,29 @@ public class QuestionManagerMaintainerFragment extends Fragment implements
 		saveButton.setOnClickListener(new SaveQuestionClickListener());
 
 		assignForDay = (ListView) view.findViewById(R.id.assign_for_day);
-		assignForDay
-				.setAdapter(new AssignForDayAdapter(getActivity(), question));
+		assignForDay.setAdapter(new AssignForDayAdapter(getActivity(), this,
+				question));
+		updateAssignForDayState();
 		return view;
 	}
 
 	@Override
-	public void selectedImages(List<ImageContent> imagesContent) {
+	public void checkDay(Day day, boolean isChecked) {
+		if (isNew) {
+			return;
+		}
+		QuestionWrapper qw = new QuestionWrapper(question);
+		if (isChecked) {
+			Set<Day> availableDays = qw.getAvailableDays();
+			availableDays.add(day);
+			qw.setAvailableDays(availableDays);
+		} else {
+			qw.removeDay(day);
+		}
+		saveQuestion();
+	}
+
+	private void updateAssignForDayState() {
+		assignForDay.setEnabled(!isNew);
 	}
 }

@@ -2,9 +2,7 @@ package com.pcs.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +13,6 @@ import android.widget.CheckBox;
 
 import com.pcs.communicator.R;
 import com.pcs.database.tables.Question;
-import com.pcs.database.tables.dao.QuestionDao;
 import com.pcs.database.tables.wrappers.QuestionWrapper;
 import com.pcs.enums.Day;
 
@@ -24,8 +21,12 @@ public class AssignForDayAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
 	private static List<Day> days = new ArrayList<Day>();
 	private QuestionWrapper questionWrapper;
-	private Activity activity;
-	private Question question;
+	private CheckDayAction checkDayAction;
+	private Context ctx;
+
+	public interface CheckDayAction {
+		public void checkDay(Day day, boolean isChecked);
+	}
 
 	static {
 		days.add(Day.MONDAY);
@@ -37,44 +38,26 @@ public class AssignForDayAdapter extends BaseAdapter {
 		days.add(Day.SUNDAY);
 	}
 
-	public static class CheckOnClickListener implements OnClickListener {
+	public class CheckOnClickListener implements OnClickListener {
 
-		private QuestionWrapper questionWrapper;
 		private Day day;
-		private Question question;
-		private QuestionDao questionDoa;
 
-		public CheckOnClickListener(Activity activity, Question question,
-				Day day) {
-			this.question = question;
-			this.questionWrapper = new QuestionWrapper(question);
+		public CheckOnClickListener(Day day) {
 			this.day = day;
-			questionDoa = new QuestionDao(activity);
-
 		}
 
 		@Override
 		public void onClick(View v) {
-			if (((CheckBox) v).isChecked()) {
-				Set<Day> availableDays = questionWrapper.getAvailableDays();
-				availableDays.add(day);
-				questionWrapper.setAvailableDays(availableDays);
-			} else {
-				Set<Day> availableDays = questionWrapper.getAvailableDays();
-				availableDays.remove(day);
-				questionWrapper.setAvailableDays(availableDays);
-			}
-
-			questionDoa.update(question);
-
+			checkDayAction.checkDay(day, ((CheckBox) v).isChecked());
 		}
 	}
 
-	public AssignForDayAdapter(Activity activity, Question question) {
-		this.activity = activity;
-		this.question = question;
+	public AssignForDayAdapter(Context ctx, CheckDayAction checkDayAction,
+			Question question) {
+		this.ctx = ctx;
+		this.checkDayAction = checkDayAction;
 		questionWrapper = new QuestionWrapper(question);
-		inflater = (LayoutInflater) activity
+		inflater = (LayoutInflater) ctx
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
@@ -99,12 +82,11 @@ public class AssignForDayAdapter extends BaseAdapter {
 				parent, false);
 		CheckBox checkBox = (CheckBox) rowView
 				.findViewById(R.id.assignForDayCheckbox);
-		checkBox.setText(activity.getResources().getString(
+		checkBox.setText(ctx.getResources().getString(
 				days.get(position).getResourceID()));
 		checkBox.setChecked(questionWrapper.getAvailableDays().contains(
 				days.get(position)));
-		checkBox.setOnClickListener(new CheckOnClickListener(activity,
-				question, days.get(position)));
+		checkBox.setOnClickListener(new CheckOnClickListener(days.get(position)));
 		return rowView;
 	}
 }
