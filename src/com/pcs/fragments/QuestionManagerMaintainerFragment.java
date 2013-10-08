@@ -2,6 +2,7 @@ package com.pcs.fragments;
 
 import java.util.Set;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -52,11 +54,16 @@ public class QuestionManagerMaintainerFragment extends Fragment implements
 				QuestionManagerListFragment questionList = (QuestionManagerListFragment) a
 						.getSupportFragmentManager().findFragmentById(
 								R.id.question_list);
-				if (questionList != null)
+				if (questionList != null) {
+					InputMethodManager imm = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(
+							questionContent.getWindowToken(), 0);
 					questionList.updateQuestionList();
+				}
 				else
 					NavUtils.navigateUpTo(getActivity(), new Intent(
 							getActivity(), QuestionManagerActivity.class));
+
 			} else {
 				questionContent.setError(getString(R.string.emptyQuestion));
 			}
