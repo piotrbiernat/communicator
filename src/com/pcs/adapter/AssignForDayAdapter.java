@@ -13,19 +13,19 @@ import android.widget.CheckBox;
 
 import com.pcs.communicator.R;
 import com.pcs.database.tables.Question;
-import com.pcs.database.tables.wrappers.QuestionWrapper;
 import com.pcs.enums.Day;
 
 public class AssignForDayAdapter extends BaseAdapter {
 
 	private LayoutInflater inflater;
 	private static List<Day> days = new ArrayList<Day>();
-	private QuestionWrapper questionWrapper;
 	private CheckDayAction checkDayAction;
 	private Context ctx;
 
 	public interface CheckDayAction {
 		public void checkDay(Day day, boolean isChecked);
+
+		public boolean containsQuestionForDay(Day day);
 	}
 
 	static {
@@ -56,9 +56,7 @@ public class AssignForDayAdapter extends BaseAdapter {
 			Question question) {
 		this.ctx = ctx;
 		this.checkDayAction = checkDayAction;
-		questionWrapper = new QuestionWrapper(question);
-		inflater = (LayoutInflater) ctx
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	@Override
@@ -84,8 +82,7 @@ public class AssignForDayAdapter extends BaseAdapter {
 				.findViewById(R.id.assignForDayCheckbox);
 		checkBox.setText(ctx.getResources().getString(
 				days.get(position).getResourceID()));
-		checkBox.setChecked(questionWrapper.getAvailableDays().contains(
-				days.get(position)));
+		checkBox.setChecked(checkDayAction.containsQuestionForDay(days.get(position)));
 		checkBox.setOnClickListener(new CheckOnClickListener(days.get(position)));
 		return rowView;
 	}

@@ -88,7 +88,7 @@ public class QuestionListDialog extends DialogFragment {
 		if (getDay() == null) {
 			throw new IllegalArgumentException("Day is not set");
 		}
-		List<Question> question = questionQuery.findQuestionWithoutDay(getDay());
+		List<Question> question = questionQuery.listAll();
 		QuestionListDialogAdpter adapter = new QuestionListDialogAdpter(getActivity(), question);
 		return adapter;
 	}

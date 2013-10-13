@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import com.pcs.communicator.R;
@@ -25,26 +23,6 @@ public class QuestionListDialogAdpter extends BaseAdapter {
 	private class Holder {
 		CheckBox selected;
 		TextView questionText;
-	}
-
-	private class QuestionChecked implements OnCheckedChangeListener {
-
-		private int index;
-
-		public QuestionChecked(int index) {
-			this.index = index;
-		}
-
-		@Override
-		public void onCheckedChanged(CompoundButton buttonView,
-				boolean isChecked) {
-			if (isChecked) {
-				selectItem(index);
-			} else {
-				deselectItem(index);
-			}
-		}
-
 	}
 
 	public QuestionListDialogAdpter(Context ctx, List<Question> question) {
@@ -80,7 +58,6 @@ public class QuestionListDialogAdpter extends BaseAdapter {
 		Holder holder = (Holder) view.getTag();
 		Question question = getItem(position);
 		holder.questionText.setText(question.getText());
-		holder.selected.setOnCheckedChangeListener(new QuestionChecked(position));
 		return view;
 	}
 
@@ -88,9 +65,6 @@ public class QuestionListDialogAdpter extends BaseAdapter {
 		return selectedQuestions;
 	}
 
-	public void setSelectedQuestions(List<Question> selectedQuestions) {
-		this.selectedQuestions = selectedQuestions;
-	}
 
 	public void selectItem(int position) {
 		Question selectedQuestion = getItem(position);

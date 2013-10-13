@@ -1,13 +1,10 @@
 package com.pcs.fragments;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Pair;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,15 +22,16 @@ import com.pcs.actions.CalendarDetailActions;
 import com.pcs.adapter.QuestionWithAnswersAdapter;
 import com.pcs.adapter.QuestionWithAnswersAdapter.ViewGroupHolder;
 import com.pcs.communicator.CalendarQuestionActivity;
-import com.pcs.communicator.QuestionManagerActivity;
 import com.pcs.communicator.R;
 import com.pcs.database.query.AnswersQuery;
+import com.pcs.database.query.QuestionForDayQuery;
 import com.pcs.database.query.QuestionQuery;
 import com.pcs.database.tables.Question;
-import com.pcs.database.tables.wrappers.QuestionWrapper;
+import com.pcs.database.tables.QuestionForDay;
 import com.pcs.enums.Day;
 import com.pcs.views.DragAndDropExpandableListView;
 import com.pcs.views.DragAndDropExpandableListView.DragDropHandlerListener;
+import com.pcs.wrappers.QuestionForDayWrapper;
 
 public class CalendarDetailFragment extends Fragment implements
 		CalendarDetailActions {
@@ -41,6 +39,7 @@ public class CalendarDetailFragment extends Fragment implements
 	private Day day;
 	private QuestionQuery questionQuery;
 	private AnswersQuery answerQuery;
+	private QuestionForDayQuery questionForDayQuery;
 	private DragAndDropExpandableListView questionsListWithAnswers;
 
 	private FrameLayout deleteZone;
@@ -78,7 +77,6 @@ public class CalendarDetailFragment extends Fragment implements
 				v.startAnimation(animHide);
 				v.setVisibility(View.GONE);
 				imageView.setImageResource(R.drawable.bin);
-				adapter.update();
 				updateVisibility();
 				break;
 			case DragEvent.ACTION_DRAG_ENDED:
@@ -97,18 +95,11 @@ public class CalendarDetailFragment extends Fragment implements
 
 		@Override
 		public void onClick(View v) {
-			List<Question> question = questionQuery.findQuestionWithoutDay(day);
-			if(!question.isEmpty()) {
-				QuestionListDialog dialog = new QuestionListDialog();
-				dialog.setDay(day);
-				dialog.setCalendarDetailActions(CalendarDetailFragment.this);
-				dialog.show(getActivity().getSupportFragmentManager(), "QuestionListDialog");
-			}
-			else {
-				Intent intent = new Intent(getActivity(),
-						QuestionManagerActivity.class);
-				startActivity(intent);
-			}
+			QuestionListDialog dialog = new QuestionListDialog();
+			dialog.setDay(day);
+			dialog.setCalendarDetailActions(CalendarDetailFragment.this);
+			dialog.show(getActivity().getSupportFragmentManager(),
+					"QuestionListDialog");
 		}
 	}
 	
@@ -130,6 +121,7 @@ public class CalendarDetailFragment extends Fragment implements
 				CalendarQuestionActivity.DAY_STRING);
 		questionQuery = new QuestionQuery(getActivity());
 		answerQuery = new AnswersQuery(getActivity());
+		questionForDayQuery = new QuestionForDayQuery(getActivity());
 	}
 
 	@Override
@@ -138,8 +130,8 @@ public class CalendarDetailFragment extends Fragment implements
 		View rootView = inflater.inflate(R.layout.fragment_calendar_detail,
 				container, false);
 		updateTitle();
-		adapter = new QuestionWithAnswersAdapter(getActivity(), questionQuery,
-				answerQuery, day);
+		adapter = new QuestionWithAnswersAdapter(getActivity(), answerQuery,
+				day, questionQuery.findQuestionForDayWrapperByDay(day));
 		adapter.setCalendarDetailActionsHandler(this);
 		questionsListWithAnswers = (DragAndDropExpandableListView) rootView.findViewById(R.id.question_list_with_answers);
 		questionsListWithAnswers.setHeaderTitle(getHeaderTitle());
@@ -174,67 +166,52 @@ public class CalendarDetailFragment extends Fragment implements
 	}
 
 	@Override
-	public void removeQuestionFromDay(Day day, Question question) {
+	public void removeQuestionFromDay(QuestionForDay questionForDay) {
 		ConfirmationDialog confirmationDialog = new ConfirmationDialog();
 		confirmationDialog.setConfirmationActions(this);
+		Question question = questionQuery.get(questionForDay.getQuestionId());
 		confirmationDialog.setQuestionText(question.getText());
-		confirmationDialog.setOnPositivArgument(new Pair<Day, Question>(day, question));
+		confirmationDialog.setOnPositivArgument(questionForDay);
 		confirmationDialog.show(getActivity().getFragmentManager(), "removeQuestionFromDay");
 
 	}
 
 	@Override
 	public void onPositiveConfirmation(Object onPositivArgument) {
-		if (onPositivArgument instanceof Pair) {
-			@SuppressWarnings("unchecked")
-			Pair<Day, Question> pair = (Pair<Day, Question>) onPositivArgument;
-			Day day2Remove = pair.first;
-			Question question = pair.second;
-			QuestionWrapper questionWrapper = new QuestionWrapper(question);
-			questionWrapper.removeDay(day2Remove);
-			questionQuery.update(questionWrapper.getQuestion());
-			answerQuery.deleteAllAnswersAsociated2Question(question);
-			adapter.update();
-			updateVisibility();
+		if (onPositivArgument instanceof QuestionForDay) {
+			QuestionForDay questionForDay = (QuestionForDay) onPositivArgument;
+			questionForDayQuery.delete(questionForDay.getId());
+			updateAdapter();
 		}
 	}
 
 	@Override
-	public void editQuestion(Day day, Question question, String newQuestionContent) {
-		Question newQuestion = new Question(newQuestionContent);
-		List<Question> foundQuestions = questionQuery
-				.listByExample(newQuestion);
-		if (foundQuestions.isEmpty()) {
-			QuestionWrapper newQuestionWrapper = new QuestionWrapper(newQuestion);
-			QuestionWrapper oldQuestionWrapper = new QuestionWrapper(question);
-			oldQuestionWrapper.removeDay(day);
-			newQuestionWrapper.setAvailableDays(Collections.singleton(day));
+	public void editQuestion(QuestionForDayWrapper questionForDayWrapper,
+			String newQuestionContent) {
+		Question newQuestion = new Question();
+		newQuestion.setText(newQuestionContent);
+		List<Question> questions = questionQuery.listByExample(newQuestion);
 
-			int order = oldQuestionWrapper.getQuestion().getOrderForDay(day);
-			newQuestionWrapper.getQuestion().setOrderForDay(order, day);
-
-			questionQuery.update(oldQuestionWrapper.getQuestion());
-
-			newQuestion.setId(questionQuery.insert(newQuestionWrapper.getQuestion()));
-			answerQuery.reassignAnswersFromOldQuestion2NewQuestion(
-					oldQuestionWrapper.getQuestion(),
-					newQuestionWrapper.getQuestion());
-			adapter.update();
-			updateVisibility();
+		if (questions.isEmpty()) {
+			QuestionForDay questionForDay2Update = questionForDayWrapper;
+			questionForDayWrapper.setQuestionId(questionQuery.insert(newQuestion));
+			questionForDayQuery.update(questionForDay2Update);
+		} else {
+			Question existingQuestion = questions.get(0);
+			QuestionForDay questionForDay2Update = questionForDayWrapper;
+			questionForDay2Update.setQuestionId(existingQuestion.getId());
+			questionForDayQuery.update(questionForDay2Update);
 		}
+		updateAdapter();
 	}
 
 	@Override
 	public void addQuestions(Day day, List<Question> questions) {
 
 		for (Question question : questions) {
-			QuestionWrapper questionWrapper = new QuestionWrapper(question);
-			Set<Day> availabeDays = questionWrapper.getAvailableDays();
-			availabeDays.add(day);
-			questionWrapper.setAvailableDays(availabeDays);
-			questionQuery.update(questionWrapper.getQuestion());
+			questionForDayQuery.saveQuestionForDay(question, day);
 		}
-		adapter.update();
+		updateAdapter();
 		updateVisibility();
 	}
 
@@ -242,12 +219,12 @@ public class CalendarDetailFragment extends Fragment implements
 	public void handelDrag(View selectedItem, View dragItem) {
 		if (selectedItem.getTag() instanceof ViewGroupHolder
 				&& dragItem.getTag() instanceof ViewGroupHolder) {
-			Question selectedQuestion = getQuestionFromTag(selectedItem);
-			Question dragQuestion = getQuestionFromTag(dragItem);
-			int selectedQuestionOrder = selectedQuestion.getOrderForDay(day);
-			int dragQuestionOrder = dragQuestion.getOrderForDay(day);
-			selectedQuestion.setOrderForDay(dragQuestionOrder, day);
-			questionQuery.update(selectedQuestion);
+			QuestionForDay selectedQuestion = getQuestionFromTag(selectedItem);
+			QuestionForDay dragQuestion = getQuestionFromTag(dragItem);
+			int selectedQuestionOrder = selectedQuestion.getQuestionOrder();
+			int dragQuestionOrder = dragQuestion.getQuestionOrder();
+			selectedQuestion.setQuestionOrder(dragQuestionOrder);
+			questionForDayQuery.update(selectedQuestion);
 			updateOrderOfQuestions(selectedQuestionOrder, dragQuestionOrder);
 		}
 	}
@@ -257,40 +234,26 @@ public class CalendarDetailFragment extends Fragment implements
 		if (selectedQuestionOrder != dragQuestionOrder) {
 			if (selectedQuestionOrder > dragQuestionOrder) {
 				for (int i = dragQuestionOrder - 1; i < selectedQuestionOrder - 1; i++) {
-					Question q = (Question) adapter.getGroup(i);
-					if (q.getOrderForDay(day) == i + 1) {
-						q.setOrderForDay(q.getOrderForDay(day) + 1, day);
-						questionQuery.update(q);
-					} else {
-						throw new IllegalArgumentException(
-								"Operacja sie nie udala Question Order = "
-										+ q.getOrderForDay(day) + " a i = " + i
-										+ 1);
-					}
+					QuestionForDayWrapper q = adapter.getGroup(i);
+					q.setQuestionOrder(q.getQuestionOrder() + 1);
+					questionForDayQuery.update(q);
 				}
 			} else {
 				for (int i = selectedQuestionOrder; i < dragQuestionOrder; i++) {
-					Question q = (Question) adapter.getGroup(i);
-					if (q.getOrderForDay(day) == i + 1) {
-						q.setOrderForDay(q.getOrderForDay(day) - 1, day);
-						questionQuery.update(q);
-					} else {
-						throw new IllegalArgumentException(
-								"Operacja sie nie udala Question Order = "
-										+ q.getOrderForDay(day) + " a i = " + i
-										+ 1);
-					}
+					QuestionForDayWrapper q = adapter.getGroup(i);
+					q.setQuestionOrder(q.getQuestionOrder() - 1);
+					questionForDayQuery.update(q);
 				}
 			}
+			updateAdapter();
 		}
-		adapter.update();
 		updateVisibility();
 	}
 
-	private Question getQuestionFromTag(View v) {
+	private QuestionForDay getQuestionFromTag(View v) {
 		if (v.getTag() instanceof ViewGroupHolder) {
 			ViewGroupHolder holderSelectedItem = (ViewGroupHolder) v.getTag();
-			return holderSelectedItem.getQuestion();
+			return holderSelectedItem.getQuestionForDay();
 		}
 		return null;
 	}
@@ -320,6 +283,10 @@ public class CalendarDetailFragment extends Fragment implements
 			relativeLayout1.setVisibility(View.GONE);
 			questionsListWithAnswers.setVisibility(View.GONE);
 		}
+	}
+
+	private void updateAdapter() {
+		adapter.setQuestionsForDayWrapper(questionQuery.findQuestionForDayWrapperByDay(day));
 	}
 
 }

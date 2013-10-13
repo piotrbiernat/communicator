@@ -1,11 +1,11 @@
 package com.pcs.adapter;
 
+import java.util.Collections;
 import java.util.List;
 
 import android.content.ClipData;
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,27 +22,25 @@ import android.widget.TextView;
 import com.pcs.actions.CalendarDetailActions;
 import com.pcs.communicator.R;
 import com.pcs.database.query.AnswersQuery;
-import com.pcs.database.query.QuestionQuery;
 import com.pcs.database.tables.Answer;
-import com.pcs.database.tables.Question;
+import com.pcs.database.tables.QuestionForDay;
 import com.pcs.enums.Day;
 import com.pcs.fragments.EditQuestionDialog;
 import com.pcs.views.HorizontalListView;
 import com.pcs.views.HorizontalListView.OnItemClick;
 import com.pcs.views.HorizontalListView.OnItemLongClick;
 import com.pcs.views.HorizontalListView.OnItemTouch;
+import com.pcs.wrappers.QuestionForDayWrapper;
 
 public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 
-	private List<Question> questions;
-	private SparseArray<Question> questionsWithOrder;
+	private List<QuestionForDayWrapper> questionsForDayWrapper;
 	private Day day;
 	private LayoutInflater inflater;
 	private FragmentActivity ctx;
 	private FrameLayout deletZone;
 	private AnswersQuery answerQuery;
 	private Animation animShow;
-	private QuestionQuery questionQuery;
 	private CalendarDetailActions calendarDetailActionsHandler;
 
 	public class ViewGroupHolder {
@@ -70,17 +68,18 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 			this.label = label;
 		}
 
-		public Question getQuestion() {
-			return question;
+		public QuestionForDayWrapper getQuestionForDay() {
+			return questionForDay;
 		}
 
-		public void setQuestion(Question question) {
-			this.question = question;
+		public void setQuestionForDay(QuestionForDayWrapper questionForDay) {
+			this.questionForDay = questionForDay;
 		}
+
 		ImageView delete;
 		ImageView edit;
 		TextView label;
-		Question question;
+		QuestionForDayWrapper questionForDay;
 	}
 
 	private class ViewChildHolder {
@@ -88,29 +87,19 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 	}
 
 	public QuestionWithAnswersAdapter(FragmentActivity ctx,
-			QuestionQuery questionQuery,
-			AnswersQuery answerQuery, Day day) {
+			AnswersQuery answerQuery, Day day, List<QuestionForDayWrapper> questionsForDayWrapper) {
 		this.ctx = ctx;
-		this.questionQuery = questionQuery;
 		this.answerQuery = answerQuery;
 		this.day = day;
-		updateSparseArray();
+		this.questionsForDayWrapper = questionsForDayWrapper;
 		inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		deletZone = (FrameLayout) ctx.findViewById(R.id.delete_zone);
 		animShow = AnimationUtils.loadAnimation(ctx, R.anim.show_popup);
+		setQuestionsForDayWrapper(questionsForDayWrapper);
 		if (ctx instanceof CalendarDetailActions) {
 			setCalendarDetailActionsHandler((CalendarDetailActions) ctx);
 		}
 	}
-
-	private void updateSparseArray() {
-		questions = questionQuery.findQuestionsForDay(day);
-		questionsWithOrder = new SparseArray<Question>();
-		for (Question question : questions) {
-			questionsWithOrder.append(question.getOrderForDay(day), question);
-		}
-	}
-
 
 	private class OnClickDeleteQuestion implements OnClickListener {
 
@@ -122,8 +111,9 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 
 		@Override
 		public void onClick(View v) {
-			Question question = (Question) getGroup(index);
-			getCalendarDetailActionsHandler().removeQuestionFromDay(day, question);
+			QuestionForDay questionForDay = getGroup(index);
+			getCalendarDetailActionsHandler().removeQuestionFromDay(
+					questionForDay);
 		}
 	}
 
@@ -137,10 +127,9 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 
 		@Override
 		public void onClick(View v) {
-			Question question = (Question) getGroup(index);
+			QuestionForDayWrapper questionForDayWrapper = getGroup(index);
 			EditQuestionDialog editQuestionDialog = new EditQuestionDialog();
-			editQuestionDialog.setDay(day);
-			editQuestionDialog.setQuestion(question);
+			editQuestionDialog.setQuestionForDayWrapper(questionForDayWrapper);
 			editQuestionDialog.setCalendarDetailActions(getCalendarDetailActionsHandler());
 			editQuestionDialog.show(ctx.getFragmentManager(),"EditQuestionDialog");
 			getCalendarDetailActionsHandler();
@@ -206,7 +195,7 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getGroupCount() {
-		return questions.size();
+		return questionsForDayWrapper.size();
 	}
 
 	@Override
@@ -215,16 +204,16 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public Object getGroup(int groupPosition) {
-		return questionsWithOrder.get(groupPosition + 1);
+	public QuestionForDayWrapper getGroup(int groupPosition) {
+		return questionsForDayWrapper.get(groupPosition);
 	}
 
 	@Override
 	public Object getChild(int groupPosition, int childPosition) {
-		Question question = (Question) getGroup(groupPosition);
+		QuestionForDayWrapper questionForDayWrapper = getGroup(groupPosition);
 
 		Answer exampleObj = new Answer();
-		exampleObj.setQuestionID(question.getId());
+		exampleObj.setQuestionForDayID(questionForDayWrapper.getId());
 		exampleObj.setForDay(day);
 		List<Answer> answers = answerQuery.listByExample(exampleObj);
 		return answers;
@@ -254,12 +243,12 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 			holder.label = (TextView) view.findViewById(R.id.label);
 			view.setTag(holder);
 		}
-		Question question = (Question) getGroup(groupPosition);
+		QuestionForDayWrapper questionForDayWrapper = getGroup(groupPosition);
 		ViewGroupHolder holder = (ViewGroupHolder) view.getTag();
 		holder.delete.setOnClickListener(new OnClickDeleteQuestion(groupPosition));
 		holder.edit.setOnClickListener(new OnClickEditQuestion(groupPosition));
-		holder.label.setText(question.getText());
-		holder.question = question;
+		holder.label.setText(questionForDayWrapper.getQuestion().getText());
+		holder.questionForDay = questionForDayWrapper;
 		return view;
 	}
 
@@ -274,13 +263,13 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 					.findViewById(R.id.horizontalScrollView1);
 			view.setTag(holder);
 		}
-		Question question = (Question) getGroup(groupPosition);
+		QuestionForDayWrapper questionForDayWrapper = getGroup(groupPosition);
 
 		ViewChildHolder holder = (ViewChildHolder) view.getTag();
 		@SuppressWarnings("unchecked")
 		List<Answer> answers = (List<Answer>) getChild(groupPosition, childPosition);
 		AnswerListAdapter adapter = new AnswerListAdapter(answers,
-				question.getId(), day, ctx, answerQuery);
+				questionForDayWrapper.getId(), day, ctx, answerQuery);
 		holder.hlv.setAdapter(adapter);
 		holder.hlv.setOnItemClick(new OnAnswerClick(adapter));
 		holder.hlv.setOnItemLongClick(new OnAnswerLongClick());
@@ -293,11 +282,6 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 		return true;
 	}
 	
-	public void update() {
-		updateSparseArray();
-		notifyDataSetChanged();
-	}
-
 	public CalendarDetailActions getCalendarDetailActionsHandler() {
 		return calendarDetailActionsHandler;
 	}
@@ -305,6 +289,16 @@ public class QuestionWithAnswersAdapter extends BaseExpandableListAdapter {
 	public void setCalendarDetailActionsHandler(
 			CalendarDetailActions calendarDetailActionsHandler) {
 		this.calendarDetailActionsHandler = calendarDetailActionsHandler;
+	}
+
+	public List<QuestionForDayWrapper> getQuestionsForDayWrapper() {
+		return questionsForDayWrapper;
+	}
+
+	public void setQuestionsForDayWrapper(List<QuestionForDayWrapper> questionsForDayWrapper) {
+		this.questionsForDayWrapper = questionsForDayWrapper;
+		Collections.sort(this.questionsForDayWrapper);
+		notifyDataSetChanged();
 	}
 
 }

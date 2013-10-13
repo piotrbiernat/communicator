@@ -2,15 +2,8 @@
 
     <item
         android:id="@+id/manager_button"
-        android:icon="@drawable/ic_launcher"
-        android:showAsAction="ifRoom"
-        android:title="@string/questions_manager"/>
-    
-    <!-- Settings, should always be in the overflow -->
-
-    <item
-        android:id="@+id/action_settings"
-        android:showAsAction="never"
-        android:title="@string/settings"/>
+        android:showAsAction="withText"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/add_new_question"/>
 
 </menu>

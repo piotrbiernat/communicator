@@ -9,7 +9,7 @@ public class Answer {
 	private String link;
 	private String text;
 	private boolean correct;
-	private long questionID;
+	private long questionForDayID;
 	private Day forDay;
 
 	public long getId() {
@@ -44,12 +44,12 @@ public class Answer {
 		this.correct = correct;
 	}
 
-	public long getQuestionID() {
-		return questionID;
+	public long getQuestionForDayID() {
+		return questionForDayID;
 	}
 
-	public void setQuestionID(long questionID) {
-		this.questionID = questionID;
+	public void setQuestionForDayID(long questionID) {
+		this.questionForDayID = questionID;
 	}
 
 	public Day getForDay() {

@@ -1,6 +1,6 @@
 package com.pcs.fragments;
 
-import java.util.Set;
+import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,12 +21,13 @@ import com.pcs.adapter.AssignForDayAdapter;
 import com.pcs.adapter.AssignForDayAdapter.CheckDayAction;
 import com.pcs.communicator.QuestionManagerActivity;
 import com.pcs.communicator.R;
+import com.pcs.database.query.QuestionForDayQuery;
 import com.pcs.database.query.QuestionQuery;
 import com.pcs.database.tables.Question;
-import com.pcs.database.tables.wrappers.QuestionWrapper;
+import com.pcs.database.tables.QuestionForDay;
 import com.pcs.enums.Day;
 
-public class QuestionManagerMaintainerFragment extends Fragment implements
+public class QuestionManagerFragment extends Fragment implements
 		CheckDayAction {
 
 	public static final String QUESTION_ID = "questionId";
@@ -34,6 +35,7 @@ public class QuestionManagerMaintainerFragment extends Fragment implements
 	private EditText questionContent;
 	private Button saveButton;
 	private QuestionQuery questionQuery;
+	private QuestionForDayQuery questionForDayQuery;
 	private Question question;
 	private boolean isNew;
 	private String questionText;
@@ -67,6 +69,7 @@ public class QuestionManagerMaintainerFragment extends Fragment implements
 			} else {
 				questionContent.setError(getString(R.string.emptyQuestion));
 			}
+			updateVisibility();
 		}
 
 	}
@@ -77,7 +80,6 @@ public class QuestionManagerMaintainerFragment extends Fragment implements
 		} else {
 			questionQuery.update(question);
 		}
-		updateAssignForDayState();
 	}
 
 	@Override
@@ -85,6 +87,7 @@ public class QuestionManagerMaintainerFragment extends Fragment implements
 		super.onCreate(savedInstanceState);
 		Bundle extras = getActivity().getIntent().getExtras();
 		questionQuery = new QuestionQuery(getActivity());
+		questionForDayQuery = new QuestionForDayQuery(getActivity());
 		if (getArguments() != null) {
 			Long id = getArguments().getLong(QUESTION_ID);
 			question = questionQuery.get(id);
@@ -113,7 +116,7 @@ public class QuestionManagerMaintainerFragment extends Fragment implements
 		assignForDay = (ListView) view.findViewById(R.id.assign_for_day);
 		assignForDay.setAdapter(new AssignForDayAdapter(getActivity(), this,
 				question));
-		updateAssignForDayState();
+		updateVisibility();
 		return view;
 	}
 
@@ -122,18 +125,34 @@ public class QuestionManagerMaintainerFragment extends Fragment implements
 		if (isNew) {
 			return;
 		}
-		QuestionWrapper qw = new QuestionWrapper(question);
 		if (isChecked) {
-			Set<Day> availableDays = qw.getAvailableDays();
-			availableDays.add(day);
-			qw.setAvailableDays(availableDays);
+			questionForDayQuery.saveQuestionForDay(question, day);
 		} else {
-			qw.removeDay(day);
+			List<QuestionForDay> questionsForDay = questionForDayQuery
+					.findQuestionForDayByQuestionIdAndDay(question.getId(), day);
+			for (QuestionForDay questionForDay : questionsForDay) {
+				questionForDayQuery.delete(questionForDay.getId());
+			}
 		}
-		saveQuestion();
 	}
 
-	private void updateAssignForDayState() {
-		assignForDay.setEnabled(!isNew);
+	@Override
+	public boolean containsQuestionForDay(Day day) {
+		return questionForDayQuery.containsQuestionDay(question.getId(), day);
 	}
+
+	public void clearDialog() {
+		isNew = true;
+		questionContent.setText("");
+		updateVisibility();
+	}
+
+	private void updateVisibility() {
+		if (isNew) {
+			assignForDay.setVisibility(View.INVISIBLE);
+		} else {
+			assignForDay.setVisibility(View.VISIBLE);
+		}
+	}
+
 }

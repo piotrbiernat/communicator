@@ -7,7 +7,7 @@ import android.support.v4.app.NavUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
-import com.pcs.fragments.QuestionManagerMaintainerFragment;
+import com.pcs.fragments.QuestionManagerFragment;
 
 /**
  * An activity representing a single Day detail screen. This activity is only
@@ -32,7 +32,7 @@ public class QuestionManagerDetailActivity extends FragmentActivity {
 					CalendarMaintenanceActivity.DAY_STRING,
 					getIntent().getSerializableExtra(
 							CalendarMaintenanceActivity.DAY_STRING));
-			QuestionManagerMaintainerFragment fragment = new QuestionManagerMaintainerFragment();
+			QuestionManagerFragment fragment = new QuestionManagerFragment();
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.question_detail_container, fragment).commit();
 		}

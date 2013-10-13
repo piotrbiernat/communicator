@@ -139,7 +139,7 @@ public class AnswerListAdapter extends BaseAdapter implements
 		Answer resultAnswer = new Answer();
 		resultAnswer.setLink(imageLink);
 		resultAnswer.setForDay(day);
-		resultAnswer.setQuestionID(questionId);
+		resultAnswer.setQuestionForDayID(questionId);
 		return resultAnswer;
 	}
 

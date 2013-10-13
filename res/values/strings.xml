@@ -19,10 +19,10 @@
     <string name="edit">Edytuj</string>
     <string name="tutor">Tutor</string>
     <string name="play">Graj</string>
-    <string name="questions_manager">Manager pytań</string>    
+    <string name="add_new_question">Dodaj nowe pytanie</string>    
     <string name="question_edition">Edycja pytania</string>    
     <string name="settings">Ustawienia</string>
-    <string name="addNew">Dodaj</string>
+    <string name="addExisting">Dodaj istniejące</string>
     <string name="yesString">Tak</string>
     <string name="noString">Nie</string>
     <string name="deleteConfirmation">Czy na pewno chcesz usunąć pytanie: </string>

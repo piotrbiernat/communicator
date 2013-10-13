@@ -67,6 +67,5 @@ public class QuestionManagerListFragment extends ListFragment {
 				.listAll());
 	}
 
-
 	
 }

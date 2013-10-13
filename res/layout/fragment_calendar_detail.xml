@@ -27,7 +27,7 @@
             android:layout_alignParentTop="true"
             android:background="@android:color/transparent"
             android:drawableLeft="@drawable/add"
-            android:text="@string/addNew" />
+            android:text="@string/addExisting" />
 
         <TextView
             android:id="@+id/textView1"
@@ -53,7 +53,7 @@
             android:layout_alignParentTop="true"
             android:background="@android:color/transparent"
             android:drawableLeft="@drawable/add"
-            android:text="@string/addNew" />
+            android:text="@string/addExisting" />
 
         <Button
             android:id="@+id/begin_button"

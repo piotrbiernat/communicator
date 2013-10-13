@@ -14,7 +14,7 @@ import com.pcs.fragments.ConfirmationDialog;
 import com.pcs.fragments.ConfirmationDialog.ConfirmationActions;
 import com.pcs.fragments.QuestionManagerListFragment;
 import com.pcs.fragments.QuestionManagerListFragment.QuestionManagerActions;
-import com.pcs.fragments.QuestionManagerMaintainerFragment;
+import com.pcs.fragments.QuestionManagerFragment;
 
 public class QuestionManagerActivity extends FragmentActivity implements
 		QuestionManagerActions, ConfirmationActions {
@@ -28,14 +28,14 @@ public class QuestionManagerActivity extends FragmentActivity implements
 		getApplicationContext().getResources();
 		super.onCreate(savedInstanceState);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setTitle(R.string.questions_manager);
+		getActionBar().setTitle(R.string.add_new_question);
 
 		setContentView(R.layout.activity_question_list);
 		questionQuery = new QuestionQuery(getApplicationContext());
 		answerQuery = new AnswersQuery(this);
 		if (findViewById(R.id.question_detail_container) != null) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-			QuestionManagerMaintainerFragment fragment = new QuestionManagerMaintainerFragment();
+			QuestionManagerFragment fragment = new QuestionManagerFragment();
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.question_detail_container, fragment).commit();
 			mTwoPane = true;
@@ -45,7 +45,7 @@ public class QuestionManagerActivity extends FragmentActivity implements
 	@Override
 	public void addNewQuestion() {
 		if (mTwoPane) {
-			QuestionManagerMaintainerFragment fragment = new QuestionManagerMaintainerFragment();
+			QuestionManagerFragment fragment = new QuestionManagerFragment();
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.question_detail_container, fragment).commit();
 		} else {
@@ -58,9 +58,9 @@ public class QuestionManagerActivity extends FragmentActivity implements
 	@Override
 	public void editQuestion(long questionId) {
 		if (mTwoPane) {
-			QuestionManagerMaintainerFragment fragment = new QuestionManagerMaintainerFragment();
+			QuestionManagerFragment fragment = new QuestionManagerFragment();
 			Bundle args = new Bundle();
-			args.putLong(QuestionManagerMaintainerFragment.QUESTION_ID,
+			args.putLong(QuestionManagerFragment.QUESTION_ID,
 					questionId);
 			fragment.setArguments(args);
 			getSupportFragmentManager().beginTransaction()
@@ -69,7 +69,7 @@ public class QuestionManagerActivity extends FragmentActivity implements
 			Intent detailIntent = new Intent(this,
 					QuestionManagerDetailActivity.class);
 			detailIntent.putExtra(
-					QuestionManagerMaintainerFragment.QUESTION_ID, questionId);
+					QuestionManagerFragment.QUESTION_ID, questionId);
 			startActivity(detailIntent);
 		}
 	}
@@ -103,6 +103,8 @@ public class QuestionManagerActivity extends FragmentActivity implements
 			answerQuery.deleteAllAnswersAsociated2Question(questionId);
 			if (mTwoPane) {
 				QuestionManagerListFragment  listFragment = (QuestionManagerListFragment) getSupportFragmentManager().findFragmentById(R.id.question_list);
+				QuestionManagerFragment  managerFragment = (QuestionManagerFragment) getSupportFragmentManager().findFragmentById(R.id.question_detail_container);
+				managerFragment.clearDialog();
 				listFragment.updateQuestionList();
 			}
 		}

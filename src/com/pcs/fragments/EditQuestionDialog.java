@@ -11,14 +11,12 @@ import android.widget.TextView;
 
 import com.pcs.actions.CalendarDetailActions;
 import com.pcs.communicator.R;
-import com.pcs.database.tables.Question;
-import com.pcs.enums.Day;
+import com.pcs.wrappers.QuestionForDayWrapper;
 
 public class EditQuestionDialog extends DialogFragment {
 
 	private CalendarDetailActions calendarDetailActions;
-	private Day day;
-	private Question question;
+	private QuestionForDayWrapper questionForDayWrapper;
 	private TextView questionTextField;
 
 	public interface ConfirmationActions {
@@ -32,33 +30,26 @@ public class EditQuestionDialog extends DialogFragment {
 		builder.setPositiveButton(R.string.yesString,
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-						getCalendarDetailActions().editQuestion(getDay(),
-								getQuestion(), questionTextField.getText()
+						getCalendarDetailActions().editQuestion(
+								questionForDayWrapper,
+								questionTextField.getText()
 										.toString());
 							}
 						}).setNegativeButton(R.string.noString, null);
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		View view = inflater.inflate(R.layout.edit_question, null);
 		questionTextField = (TextView) view.findViewById(R.id.question_text);
-		questionTextField.setText(question.getText());
+		questionTextField.setText(questionForDayWrapper.getQuestion().getText());
 		builder.setView(view);
 		return builder.create();
 	}
 
-	public Day getDay() {
-		return day;
+	public QuestionForDayWrapper getQuestionForDayWrapper() {
+		return questionForDayWrapper;
 	}
 
-	public void setDay(Day day) {
-		this.day = day;
-	}
-
-	public Question getQuestion() {
-		return question;
-	}
-
-	public void setQuestion(Question question) {
-		this.question = question;
+	public void setQuestionForDayWrapper(QuestionForDayWrapper questionForDayWrapper) {
+		this.questionForDayWrapper = questionForDayWrapper;
 	}
 
 	public CalendarDetailActions getCalendarDetailActions() {
